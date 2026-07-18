@@ -31,67 +31,85 @@ function downloadPdf() {
 
     <Reveal>
       <article class="resume">
+        <CommandLine path="~/resume" command="resume --format=full" class="resume__cmd" />
+
         <header class="resume__header">
           <p class="resume__name">Noah Scharrenberg</p>
           <p class="resume__role">AI Engineer · Software Engineer</p>
-          <ul class="resume__links">
-            <li><a href="https://www.linkedin.com/in/nscharrenberg/" target="_blank" rel="noopener noreferrer">linkedin.com/in/nscharrenberg</a></li>
-            <li><a href="https://github.com/nscharrenberg" target="_blank" rel="noopener noreferrer">github.com/nscharrenberg</a></li>
-            <li><a href="https://codeberg.org/nscharrenberg" target="_blank" rel="noopener noreferrer">codeberg.org/nscharrenberg</a></li>
-          </ul>
         </header>
 
-        <section class="resume__section">
-          <h2>Summary</h2>
-          <p v-for="(paragraph, i) in bio" :key="i">{{ paragraph }}</p>
-        </section>
-
-        <section class="resume__section">
-          <h2>Skills</h2>
-          <ul class="resume__pills">
-            <li v-for="area in focusAreas" :key="area">{{ area }}</li>
-          </ul>
-        </section>
-
-        <section class="resume__section">
-          <h2>Experience</h2>
-          <div v-for="entry in experience" :key="`${entry.org}-${entry.period}`" class="resume__entry">
-            <div class="resume__entry-head">
-              <span class="resume__entry-title">{{ entry.role }} · {{ entry.org }}</span>
-              <span class="resume__entry-period">{{ entry.period }}</span>
-            </div>
-            <p>{{ entry.summary }}</p>
+        <section class="spec">
+          <h2 class="spec__label"><span class="spec__index">01</span> Summary</h2>
+          <div class="spec__body">
+            <p v-for="(paragraph, i) in bio" :key="i">{{ paragraph }}</p>
           </div>
         </section>
 
-        <section class="resume__section">
-          <h2>Education</h2>
-          <div v-for="entry in education" :key="`${entry.org}-${entry.period}`" class="resume__entry">
-            <div class="resume__entry-head">
-              <span class="resume__entry-title">{{ entry.role }} · {{ entry.org }}</span>
-              <span class="resume__entry-period">{{ entry.period }}</span>
-            </div>
-            <p>{{ entry.summary }}</p>
+        <section class="spec">
+          <h2 class="spec__label"><span class="spec__index">02</span> Skills</h2>
+          <div class="spec__body">
+            <ul class="spec__pills">
+              <li v-for="area in focusAreas" :key="area">{{ area }}</li>
+            </ul>
           </div>
         </section>
 
-        <section class="resume__section">
-          <h2>Projects</h2>
-          <div v-for="project in projects" :key="project.title" class="resume__entry">
-            <div class="resume__entry-head">
-              <span class="resume__entry-title">{{ project.title }}</span>
-              <span class="resume__entry-period">{{ project.stack.join(' · ') }}</span>
+        <section class="spec">
+          <h2 class="spec__label"><span class="spec__index">03</span> Experience</h2>
+          <div class="spec__body">
+            <div v-for="entry in experience" :key="`${entry.org}-${entry.period}`" class="spec__entry">
+              <div class="spec__entry-head">
+                <span class="spec__entry-title">{{ entry.role }} · {{ entry.org }}</span>
+                <span class="spec__entry-period">{{ entry.period }}</span>
+              </div>
+              <p>{{ entry.summary }}</p>
             </div>
-            <p>{{ project.summary }}</p>
-            <p class="resume__entry-links">
-              <a
-                v-for="link in project.links"
-                :key="link.href"
-                :href="link.href"
-                target="_blank"
-                rel="noopener noreferrer"
-              >{{ link.label }}</a>
-            </p>
+          </div>
+        </section>
+
+        <section class="spec">
+          <h2 class="spec__label"><span class="spec__index">04</span> Education</h2>
+          <div class="spec__body">
+            <div v-for="entry in education" :key="`${entry.org}-${entry.period}`" class="spec__entry">
+              <div class="spec__entry-head">
+                <span class="spec__entry-title">{{ entry.role }} · {{ entry.org }}</span>
+                <span class="spec__entry-period">{{ entry.period }}</span>
+              </div>
+              <p>{{ entry.summary }}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="spec">
+          <h2 class="spec__label"><span class="spec__index">05</span> Projects</h2>
+          <div class="spec__body">
+            <div v-for="project in projects" :key="project.title" class="spec__entry">
+              <div class="spec__entry-head">
+                <span class="spec__entry-title">{{ project.title }}</span>
+                <span class="spec__entry-period">{{ project.stack.join(' · ') }}</span>
+              </div>
+              <p>{{ project.summary }}</p>
+              <p class="spec__entry-links">
+                <a
+                  v-for="link in project.links"
+                  :key="link.href"
+                  :href="link.href"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ link.label }}</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="spec spec--contact">
+          <h2 class="spec__label"><span class="spec__index">06</span> Contact</h2>
+          <div class="spec__body">
+            <ul class="spec__links">
+              <li><a href="https://www.linkedin.com/in/nscharrenberg/" target="_blank" rel="noopener noreferrer">linkedin.com/in/nscharrenberg</a></li>
+              <li><a href="https://github.com/nscharrenberg" target="_blank" rel="noopener noreferrer">github.com/nscharrenberg</a></li>
+              <li><a href="https://codeberg.org/nscharrenberg" target="_blank" rel="noopener noreferrer">codeberg.org/nscharrenberg</a></li>
+            </ul>
           </div>
         </section>
       </article>
@@ -101,7 +119,7 @@ function downloadPdf() {
 
 <style scoped>
 .page {
-  max-width: 760px;
+  max-width: 860px;
   margin: 0 auto;
   padding: var(--space-2xl) clamp(16px, 4vw, 40px);
 }
@@ -150,17 +168,21 @@ function downloadPdf() {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--bg1);
-  padding: clamp(24px, 4vw, 40px);
+  padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 40px) clamp(24px, 4vw, 40px);
+}
+
+.resume__cmd {
+  margin-bottom: var(--space-lg);
 }
 
 .resume__header {
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-md);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-strong);
 }
 
 .resume__name {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--fg0);
   margin: 0 0 4px;
@@ -169,50 +191,54 @@ function downloadPdf() {
 .resume__role {
   font-size: 14px;
   color: var(--fg1);
-  margin: 0 0 var(--space-sm);
+  margin: 0;
 }
 
-.resume__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm) var(--space-md);
-  font-size: 12.5px;
+/* --- spec-sheet section grid: numbered label column + content column --- */
+.spec {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--line);
 }
 
-.resume__links a {
-  color: var(--accent);
+.spec:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
-.resume__section {
-  margin-bottom: var(--space-lg);
-}
-
-.resume__section:last-child {
-  margin-bottom: 0;
-}
-
-.resume__section h2 {
+.spec__label {
   font-size: 12px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 var(--space-sm);
+  color: var(--fg0);
+  margin: 0;
 }
 
-.resume__section p {
+.spec__index {
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.spec__body p {
   font-size: 13.5px;
   line-height: 1.65;
   color: var(--fg1);
   margin: 0 0 8px;
 }
 
-.resume__pills {
+.spec__body p:last-child {
+  margin-bottom: 0;
+}
+
+.spec__pills {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.resume__pills li {
+.spec__pills li {
   font-size: 12px;
   padding: 4px 10px;
   border-radius: 999px;
@@ -220,15 +246,15 @@ function downloadPdf() {
   color: var(--fg1);
 }
 
-.resume__entry {
+.spec__entry {
   margin-bottom: var(--space-sm);
 }
 
-.resume__entry:last-child {
+.spec__entry:last-child {
   margin-bottom: 0;
 }
 
-.resume__entry-head {
+.spec__entry-head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -236,25 +262,43 @@ function downloadPdf() {
   gap: 8px;
 }
 
-.resume__entry-title {
+.spec__entry-title {
   font-size: 13.5px;
   font-weight: 700;
   color: var(--fg0);
 }
 
-.resume__entry-period {
+.spec__entry-period {
   font-size: 12px;
   color: var(--fg2);
   white-space: nowrap;
 }
 
-.resume__entry-links {
+.spec__entry-links {
   display: flex;
   gap: var(--space-sm);
 }
 
-.resume__entry-links a {
+.spec__entry-links a {
   color: var(--accent);
   font-size: 12.5px;
+}
+
+.spec__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
+  font-size: 12.5px;
+}
+
+.spec__links a {
+  color: var(--accent);
+}
+
+@media (max-width: 560px) {
+  .spec {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 </style>

@@ -1,14 +1,22 @@
 import type { TimelineEntry } from '~/components/portfolio/TimelineItem.vue'
 
-/**
- * TODO: replace with real degrees/institutions, most recent first.
- * Same shape as experience.ts — "role" doubles as the degree/programme name.
- */
 export const education: TimelineEntry[] = [
   {
-    role: 'Degree programme',
-    org: 'Institution',
-    period: '20XX — 20XX',
-    summary: 'Thesis title or honors note, if any.',
+    role: 'MSc Artificial Intelligence',
+    org: 'Maastricht University',
+    period: '2023 — 2025',
+    summary: 'Thesis: PSALM — an LLM-as-a-judge framework for evaluating copyright infringement under EU law.',
+  },
+  {
+    role: 'BSc Data Science and Artificial Intelligence',
+    org: 'Maastricht University',
+    period: '2020 — 2023',
+    summary: 'Foundations in data science, machine learning, and applied AI.',
+  },
+  {
+    role: 'BSc Software Engineering & Open Innovation',
+    org: 'Fontys University of Applied Sciences, Eindhoven',
+    period: '2016 — 2020',
+    summary: 'Foundations in software engineering practice and open innovation methods.',
   },
 ]
