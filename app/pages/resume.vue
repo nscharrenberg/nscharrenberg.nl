@@ -18,7 +18,7 @@ function downloadPdf() {
   <div class="page">
     <div class="page__top no-print">
       <SectionHeading eyebrow="~/resume" title="Resume">
-        Everything above, in one page you can take with you.
+        Everything above, parsed into one file you can take with you.
       </SectionHeading>
       <button type="button" class="download" @click="downloadPdf">
         <IconResume />
@@ -31,86 +31,108 @@ function downloadPdf() {
 
     <Reveal>
       <article class="resume">
-        <CommandLine path="~/resume" command="resume --format=full" class="resume__cmd" />
+        <CommandLine path="~/resume" command="cat resume.yaml" class="resume__cmd" />
 
-        <header class="resume__header">
-          <p class="resume__name">Noah Scharrenberg</p>
-          <p class="resume__role">AI Engineer · Software Engineer</p>
-        </header>
+        <p class="yaml__comment"># curriculum vitae</p>
 
-        <section class="spec">
-          <h2 class="spec__label"><span class="spec__index">01</span> Summary</h2>
-          <div class="spec__body">
-            <p v-for="(paragraph, i) in bio" :key="i">{{ paragraph }}</p>
+        <dl class="yaml__map yaml__map--root">
+          <div class="yaml__pair">
+            <dt>name</dt>
+            <dd>Noah Scharrenberg</dd>
+          </div>
+          <div class="yaml__pair">
+            <dt>role</dt>
+            <dd>AI Engineer · Software Engineer</dd>
+          </div>
+        </dl>
+
+        <section class="yaml__section">
+          <h2 class="yaml__key">summary<span class="yaml__punct">: |</span></h2>
+          <div class="yaml__body">
+            <p v-for="(paragraph, i) in bio" :key="i" class="yaml__scalar">{{ paragraph }}</p>
           </div>
         </section>
 
-        <section class="spec">
-          <h2 class="spec__label"><span class="spec__index">02</span> Skills</h2>
-          <div class="spec__body">
-            <ul class="spec__pills">
-              <li v-for="area in focusAreas" :key="area">{{ area }}</li>
-            </ul>
-          </div>
+        <section class="yaml__section">
+          <h2 class="yaml__key">skills<span class="yaml__punct">:</span></h2>
+          <ul class="yaml__body yaml__list">
+            <li v-for="area in focusAreas" :key="area" class="yaml__item">
+              <span class="yaml__dash" aria-hidden="true">-</span>{{ area }}
+            </li>
+          </ul>
         </section>
 
-        <section class="spec">
-          <h2 class="spec__label"><span class="spec__index">03</span> Experience</h2>
-          <div class="spec__body">
-            <div v-for="entry in experience" :key="`${entry.org}-${entry.period}`" class="spec__entry">
-              <div class="spec__entry-head">
-                <span class="spec__entry-title">{{ entry.role }} · {{ entry.org }}</span>
-                <span class="spec__entry-period">{{ entry.period }}</span>
-              </div>
-              <p>{{ entry.summary }}</p>
+        <section class="yaml__section">
+          <h2 class="yaml__key">experience<span class="yaml__punct">:</span></h2>
+          <ul class="yaml__body yaml__list">
+            <li v-for="entry in experience" :key="`${entry.org}-${entry.period}`" class="yaml__item yaml__item--map">
+              <span class="yaml__dash" aria-hidden="true">-</span>
+              <dl class="yaml__map">
+                <div class="yaml__pair"><dt>role</dt><dd>{{ entry.role }}</dd></div>
+                <div class="yaml__pair"><dt>org</dt><dd>{{ entry.org }}</dd></div>
+                <div class="yaml__pair"><dt>period</dt><dd>{{ entry.period }}</dd></div>
+                <div class="yaml__pair yaml__pair--wrap"><dt>summary</dt><dd>{{ entry.summary }}</dd></div>
+              </dl>
+            </li>
+          </ul>
+        </section>
+
+        <section class="yaml__section">
+          <h2 class="yaml__key">education<span class="yaml__punct">:</span></h2>
+          <ul class="yaml__body yaml__list">
+            <li v-for="entry in education" :key="`${entry.org}-${entry.period}`" class="yaml__item yaml__item--map">
+              <span class="yaml__dash" aria-hidden="true">-</span>
+              <dl class="yaml__map">
+                <div class="yaml__pair"><dt>role</dt><dd>{{ entry.role }}</dd></div>
+                <div class="yaml__pair"><dt>org</dt><dd>{{ entry.org }}</dd></div>
+                <div class="yaml__pair"><dt>period</dt><dd>{{ entry.period }}</dd></div>
+                <div class="yaml__pair yaml__pair--wrap"><dt>summary</dt><dd>{{ entry.summary }}</dd></div>
+              </dl>
+            </li>
+          </ul>
+        </section>
+
+        <section class="yaml__section">
+          <h2 class="yaml__key">projects<span class="yaml__punct">:</span></h2>
+          <ul class="yaml__body yaml__list">
+            <li v-for="project in projects" :key="project.title" class="yaml__item yaml__item--map">
+              <span class="yaml__dash" aria-hidden="true">-</span>
+              <dl class="yaml__map">
+                <div class="yaml__pair"><dt>title</dt><dd>{{ project.title }}</dd></div>
+                <div class="yaml__pair yaml__pair--wrap"><dt>stack</dt><dd>[{{ project.stack.join(', ') }}]</dd></div>
+                <div class="yaml__pair yaml__pair--wrap"><dt>summary</dt><dd>{{ project.summary }}</dd></div>
+                <div class="yaml__pair yaml__pair--wrap">
+                  <dt>links</dt>
+                  <dd>
+                    <ul class="yaml__links">
+                      <li v-for="link in project.links" :key="link.href">
+                        <span class="yaml__dash" aria-hidden="true">-</span>
+                        <a :href="link.href" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+              </dl>
+            </li>
+          </ul>
+        </section>
+
+        <section class="yaml__section">
+          <h2 class="yaml__key">contact<span class="yaml__punct">:</span></h2>
+          <dl class="yaml__body yaml__map">
+            <div class="yaml__pair">
+              <dt>linkedin</dt>
+              <dd><a href="https://www.linkedin.com/in/nscharrenberg/" target="_blank" rel="noopener noreferrer">linkedin.com/in/nscharrenberg</a></dd>
             </div>
-          </div>
-        </section>
-
-        <section class="spec">
-          <h2 class="spec__label"><span class="spec__index">04</span> Education</h2>
-          <div class="spec__body">
-            <div v-for="entry in education" :key="`${entry.org}-${entry.period}`" class="spec__entry">
-              <div class="spec__entry-head">
-                <span class="spec__entry-title">{{ entry.role }} · {{ entry.org }}</span>
-                <span class="spec__entry-period">{{ entry.period }}</span>
-              </div>
-              <p>{{ entry.summary }}</p>
+            <div class="yaml__pair">
+              <dt>github</dt>
+              <dd><a href="https://github.com/nscharrenberg" target="_blank" rel="noopener noreferrer">github.com/nscharrenberg</a></dd>
             </div>
-          </div>
-        </section>
-
-        <section class="spec">
-          <h2 class="spec__label"><span class="spec__index">05</span> Projects</h2>
-          <div class="spec__body">
-            <div v-for="project in projects" :key="project.title" class="spec__entry">
-              <div class="spec__entry-head">
-                <span class="spec__entry-title">{{ project.title }}</span>
-                <span class="spec__entry-period">{{ project.stack.join(' · ') }}</span>
-              </div>
-              <p>{{ project.summary }}</p>
-              <p class="spec__entry-links">
-                <a
-                  v-for="link in project.links"
-                  :key="link.href"
-                  :href="link.href"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >{{ link.label }}</a>
-              </p>
+            <div class="yaml__pair">
+              <dt>codeberg</dt>
+              <dd><a href="https://codeberg.org/nscharrenberg" target="_blank" rel="noopener noreferrer">codeberg.org/nscharrenberg</a></dd>
             </div>
-          </div>
-        </section>
-
-        <section class="spec spec--contact">
-          <h2 class="spec__label"><span class="spec__index">06</span> Contact</h2>
-          <div class="spec__body">
-            <ul class="spec__links">
-              <li><a href="https://www.linkedin.com/in/nscharrenberg/" target="_blank" rel="noopener noreferrer">linkedin.com/in/nscharrenberg</a></li>
-              <li><a href="https://github.com/nscharrenberg" target="_blank" rel="noopener noreferrer">github.com/nscharrenberg</a></li>
-              <li><a href="https://codeberg.org/nscharrenberg" target="_blank" rel="noopener noreferrer">codeberg.org/nscharrenberg</a></li>
-            </ul>
-          </div>
+          </dl>
         </section>
       </article>
     </Reveal>
@@ -169,136 +191,181 @@ function downloadPdf() {
   border-radius: var(--radius-md);
   background: var(--bg1);
   padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 40px) clamp(24px, 4vw, 40px);
+  font-size: 13.5px;
+  line-height: 1.7;
 }
 
 .resume__cmd {
   margin-bottom: var(--space-lg);
 }
 
-.resume__header {
+.yaml__comment {
+  color: var(--fg2);
+  margin: 0 0 var(--space-md);
+}
+
+/* --- key: value mapping rows --- */
+.yaml__map {
+  margin: 0;
+}
+
+.yaml__map--root {
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--line-strong);
 }
 
-.resume__name {
-  font-size: 26px;
+.yaml__map--root .yaml__pair dd {
+  font-size: 15px;
+  color: var(--fg0);
   font-weight: 700;
-  color: var(--fg0);
-  margin: 0 0 4px;
 }
 
-.resume__role {
-  font-size: 14px;
-  color: var(--fg1);
-  margin: 0;
-}
-
-/* --- spec-sheet section grid: numbered label column + content column --- */
-.spec {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: var(--space-md);
-  padding: var(--space-md) 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.spec:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.spec__label {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg0);
-  margin: 0;
-}
-
-.spec__index {
-  color: var(--accent);
-  margin-right: 6px;
-}
-
-.spec__body p {
+.yaml__map--root .yaml__pair:last-child dd {
   font-size: 13.5px;
-  line-height: 1.65;
+  font-weight: 400;
   color: var(--fg1);
-  margin: 0 0 8px;
 }
 
-.spec__body p:last-child {
+.yaml__pair {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.yaml__pair--wrap {
+  align-items: flex-start;
+}
+
+.yaml__pair:last-child {
   margin-bottom: 0;
 }
 
-.spec__pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.yaml__pair dt {
+  flex-shrink: 0;
+  color: var(--fg2);
 }
 
-.spec__pills li {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
+.yaml__pair dt::after {
+  content: ':';
+  color: var(--fg2);
+}
+
+.yaml__pair dd {
+  margin: 0;
   color: var(--fg1);
 }
 
-.spec__entry {
+.yaml__pair dd a {
+  color: var(--accent2);
+}
+
+/* --- top-level section keys, styled as literal yaml, not headings --- */
+.yaml__section {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--line);
+}
+
+.yaml__section:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.yaml__key {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 var(--space-sm);
+}
+
+.yaml__punct {
+  color: var(--fg2);
+  font-weight: 400;
+}
+
+/* --- indented block under a key, guided by a dashed rule like an editor's indent guide --- */
+.yaml__body {
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px dashed var(--line-strong);
+}
+
+.yaml__scalar {
+  margin: 0 0 8px;
+  color: var(--fg1);
+}
+
+.yaml__scalar:last-child {
+  margin-bottom: 0;
+}
+
+.yaml__list {
+  list-style: none;
+  padding-left: 18px;
+}
+
+.yaml__item {
+  color: var(--fg1);
+  margin-bottom: 6px;
+}
+
+.yaml__item:last-child {
+  margin-bottom: 0;
+}
+
+.yaml__dash {
+  color: var(--glitch2);
+  margin-right: 8px;
+}
+
+.yaml__item--map {
+  display: flex;
+  align-items: flex-start;
   margin-bottom: var(--space-sm);
 }
 
-.spec__entry:last-child {
+.yaml__item--map:last-child {
   margin-bottom: 0;
 }
 
-.spec__entry-head {
+.yaml__item--map > .yaml__dash {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.yaml__item--map .yaml__map {
+  flex: 1;
+  min-width: 0;
+}
+
+.yaml__item--map .yaml__pair dt {
+  min-width: 62px;
+}
+
+.yaml__links {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
+  gap: 4px var(--space-md);
+}
+
+.yaml__links li {
+  display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.spec__entry-title {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--fg0);
-}
-
-.spec__entry-period {
-  font-size: 12px;
-  color: var(--fg2);
-  white-space: nowrap;
-}
-
-.spec__entry-links {
-  display: flex;
-  gap: var(--space-sm);
-}
-
-.spec__entry-links a {
-  color: var(--accent);
-  font-size: 12.5px;
-}
-
-.spec__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm) var(--space-md);
-  font-size: 12.5px;
-}
-
-.spec__links a {
-  color: var(--accent);
 }
 
 @media (max-width: 560px) {
-  .spec {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  .yaml__pair {
+    flex-wrap: wrap;
+  }
+
+  .yaml__item--map .yaml__pair dt {
+    min-width: 0;
   }
 }
 </style>
