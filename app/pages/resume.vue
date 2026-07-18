@@ -33,26 +33,26 @@ const stats = [
   { label: 'Roles active now', value: currentRoleCount },
 ]
 
-type ProcessKind = 'work' | 'edu'
 interface ProcessEntry extends TimelineEntry {
-  kind: ProcessKind
   current: boolean
   pid: number
 }
 
-function toProcessEntry(kind: ProcessKind, offset: number) {
+function toProcessEntry(offset: number) {
   return (entry: TimelineEntry, i: number): ProcessEntry => ({
     ...entry,
-    kind,
     current: /present/i.test(entry.period),
     pid: offset + i * 37,
   })
 }
 
-const timeline: ProcessEntry[] = [
-  ...experience.map(toProcessEntry('work', 4200)),
-  ...education.map(toProcessEntry('edu', 8100)),
-].sort((a, b) => startYear(b.period) - startYear(a.period))
+const workTimeline: ProcessEntry[] = experience
+  .map(toProcessEntry(4200))
+  .sort((a, b) => startYear(b.period) - startYear(a.period))
+
+const eduTimeline: ProcessEntry[] = education
+  .map(toProcessEntry(8100))
+  .sort((a, b) => startYear(b.period) - startYear(a.period))
 
 const statsEl = ref<HTMLElement | null>(null)
 const prefersReducedMotion = usePrefersReducedMotion()
@@ -115,7 +115,8 @@ onMounted(() => {
         <p class="cv__role">AI Engineer · Software Engineer</p>
       </Reveal>
 
-      <Reveal tag="section" class="cv__stats" aria-label="At a glance">
+      <Reveal tag="section" class="cv__stats">
+        <h2 class="cv__title cv__title--standalone">At a Glance</h2>
         <div ref="statsEl" class="stats">
           <div v-for="stat in stats" :key="stat.label" class="stat">
             <span class="stat__value">{{ stat.value }}</span>
@@ -125,23 +126,26 @@ onMounted(() => {
       </Reveal>
 
       <Reveal tag="section" class="cv__section">
-        <CommandLine path="~/resume" command="cat summary.md" />
-        <h2 class="visually-hidden">Summary</h2>
+        <div class="cv__head">
+          <h2 class="cv__title">Summary</h2>
+          <CommandLine path="~/resume" command="cat summary.md" />
+        </div>
         <p v-for="(paragraph, i) in bio" :key="i" class="cv__prose">{{ paragraph }}</p>
       </Reveal>
 
       <Reveal tag="section" class="cv__section">
-        <CommandLine path="~/resume" command="ps aux --sort=-start" />
-        <h2 class="visually-hidden">Experience and education</h2>
+        <div class="cv__head">
+          <h2 class="cv__title">Experience</h2>
+          <CommandLine path="~/resume" command="ps aux --work" />
+        </div>
         <ul class="proc">
-          <li v-for="entry in timeline" :key="`${entry.kind}-${entry.org}-${entry.period}`" class="proc__row">
+          <li v-for="entry in workTimeline" :key="`${entry.org}-${entry.period}`" class="proc__row">
             <div class="proc__meta">
               <span class="proc__status" :class="entry.current ? 'proc__status--running' : 'proc__status--done'">
                 <span class="proc__dot" aria-hidden="true" />
                 {{ entry.current ? 'RUNNING' : 'DONE' }}
               </span>
               <span class="proc__pid">PID {{ entry.pid }}</span>
-              <span class="proc__type" :class="`proc__type--${entry.kind}`">{{ entry.kind === 'work' ? 'WORK' : 'EDU' }}</span>
             </div>
             <p class="proc__cmd">
               <span class="proc__role">{{ entry.role }}</span><span class="proc__at">@</span><span class="proc__org">{{ entry.org }}</span>
@@ -153,8 +157,33 @@ onMounted(() => {
       </Reveal>
 
       <Reveal tag="section" class="cv__section">
-        <CommandLine path="~/resume" command="tail -f skills.log" />
-        <h2 class="visually-hidden">Skills</h2>
+        <div class="cv__head">
+          <h2 class="cv__title">Education</h2>
+          <CommandLine path="~/resume" command="ps aux --edu" />
+        </div>
+        <ul class="proc">
+          <li v-for="entry in eduTimeline" :key="`${entry.org}-${entry.period}`" class="proc__row">
+            <div class="proc__meta">
+              <span class="proc__status" :class="entry.current ? 'proc__status--running' : 'proc__status--done'">
+                <span class="proc__dot" aria-hidden="true" />
+                {{ entry.current ? 'RUNNING' : 'DONE' }}
+              </span>
+              <span class="proc__pid">PID {{ entry.pid }}</span>
+            </div>
+            <p class="proc__cmd">
+              <span class="proc__role">{{ entry.role }}</span><span class="proc__at">@</span><span class="proc__org">{{ entry.org }}</span>
+              <span class="proc__period">{{ entry.period }}</span>
+            </p>
+            <p class="proc__summary"><span class="proc__tree" aria-hidden="true">└─</span>{{ entry.summary }}</p>
+          </li>
+        </ul>
+      </Reveal>
+
+      <Reveal tag="section" class="cv__section">
+        <div class="cv__head">
+          <h2 class="cv__title">Skills</h2>
+          <CommandLine path="~/resume" command="tail -f skills.log" />
+        </div>
         <ul class="log">
           <li v-for="(area, i) in focusAreas" :key="area" class="log__row">
             <span class="log__time">[{{ (i * 0.041 + 0.012).toFixed(3) }}s]</span>
@@ -165,8 +194,10 @@ onMounted(() => {
       </Reveal>
 
       <Reveal tag="section" class="cv__section">
-        <CommandLine path="~/resume" command="ls -la dist/" />
-        <h2 class="visually-hidden">Projects</h2>
+        <div class="cv__head">
+          <h2 class="cv__title">Projects</h2>
+          <CommandLine path="~/resume" command="ls -la dist/" />
+        </div>
         <ul class="artifacts">
           <li v-for="project in projects" :key="project.title" class="artifact">
             <p class="artifact__row">
@@ -190,8 +221,10 @@ onMounted(() => {
       </Reveal>
 
       <Reveal tag="section" class="cv__section cv__section--last">
-        <CommandLine path="~/resume" command="netstat -tlnp" />
-        <h2 class="visually-hidden">Contact</h2>
+        <div class="cv__head">
+          <h2 class="cv__title">Contact</h2>
+          <CommandLine path="~/resume" command="netstat -tlnp" />
+        </div>
         <table class="netstat">
           <thead>
             <tr>
@@ -351,21 +384,43 @@ onMounted(() => {
   padding: clamp(18px, 3.5vw, 28px);
 }
 
+.cv__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--space-md);
+}
+
+.cv__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg0);
+  margin: 0;
+}
+
+.cv__title--standalone {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  margin: 0 0 10px 2px;
+}
+
 .cv__prose {
   font-size: 13.5px;
   line-height: 1.7;
   color: var(--fg1);
-  margin: var(--space-md) 0 0;
+  margin: 0;
 }
 
 .cv__prose + .cv__prose {
   margin-top: 10px;
 }
 
-/* --- process table (experience + education) --- */
+/* --- process table (experience / education) --- */
 .proc {
   list-style: none;
-  margin: var(--space-md) 0 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -426,21 +481,6 @@ onMounted(() => {
   color: var(--fg2);
 }
 
-.proc__type {
-  padding: 1px 6px;
-  border-radius: 4px;
-  border: 1px solid var(--line-strong);
-  font-weight: 700;
-}
-
-.proc__type--work {
-  color: var(--accent);
-}
-
-.proc__type--edu {
-  color: var(--accent2);
-}
-
 .proc__cmd {
   display: flex;
   flex-wrap: wrap;
@@ -488,7 +528,7 @@ onMounted(() => {
 /* --- skills boot log --- */
 .log {
   list-style: none;
-  margin: var(--space-md) 0 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -520,7 +560,7 @@ onMounted(() => {
 /* --- project artifacts --- */
 .artifacts {
   list-style: none;
-  margin: var(--space-md) 0 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -582,7 +622,6 @@ onMounted(() => {
 /* --- contact table --- */
 .netstat {
   width: 100%;
-  margin-top: var(--space-md);
   border-collapse: collapse;
   font-size: 12.5px;
 }
