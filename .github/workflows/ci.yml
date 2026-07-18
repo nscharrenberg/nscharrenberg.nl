@@ -1,9 +1,15 @@
 name: CI
 
+# Push trigger is intentionally not scoped to `main` right now — deploying every
+# pushed branch to GitHub Pages so the site is viewable on mobile while still
+# in progress. Once this settles onto `main` as the usual workflow, tighten
+# `on.push.branches` back down to `[main]`.
 on:
   push:
-    branches: [main]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -23,7 +29,31 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm generate
 
-      # TODO: deploy `.output/public` to wherever nscharrenberg.nl is hosted.
-      # No deploy step is wired up yet — this job only proves the site builds cleanly.
+      - name: Generate static site
+        run: pnpm generate
+        env:
+          # This repo isn't a `<user>.github.io` repo, so Pages serves it from
+          # a subpath (https://<user>.github.io/<repo>/) — bake that into the
+          # build. Drop this once a custom domain (CNAME) is configured.
+          NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name == 'push'
+        with:
+          path: .output/public
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - id: deployment
+        uses: actions/deploy-pages@v4
