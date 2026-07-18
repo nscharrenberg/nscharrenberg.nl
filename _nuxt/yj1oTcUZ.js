@@ -1,1 +1,0 @@
-import{_ as s,o,s as r,j as t}from"./CMqNrqNR.js";const n={};function a(e,c){return o(),r("td",null,[t(e.$slots,"default")])}const l=Object.assign(s(n,[["render",a]]),{__name:"ProseTd"});export{l as default};
