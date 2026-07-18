@@ -14,16 +14,20 @@ useSeoMeta({
     </SectionHeading>
 
     <Reveal>
-      <TerminalWindow title="cat about.md" class="page__bio">
-        <p v-for="(paragraph, i) in bio" :key="i" class="page__paragraph">{{ paragraph }}</p>
-      </TerminalWindow>
-    </Reveal>
+      <TerminalWindow title="noah@host — about" class="page__session">
+        <CommandLine command="whoami" />
+        <p class="out">Noah Scharrenberg — AI Engineer, Software Engineer</p>
 
-    <Reveal :delay="120">
-      <h2 class="page__subhead">Focus areas</h2>
-      <ul class="page__tags">
-        <li v-for="area in focusAreas" :key="area" class="page__tag">{{ area }}</li>
-      </ul>
+        <CommandLine command="cat focus.txt" />
+        <ul class="out out--tags">
+          <li v-for="area in focusAreas" :key="area" class="tag">{{ area }}</li>
+        </ul>
+
+        <CommandLine command="cat about.md" />
+        <p v-for="(paragraph, i) in bio" :key="i" class="out out--prose">{{ paragraph }}</p>
+
+        <CommandLine cursor />
+      </TerminalWindow>
     </Reveal>
   </div>
 </template>
@@ -35,29 +39,26 @@ useSeoMeta({
   padding: var(--space-2xl) clamp(16px, 4vw, 40px);
 }
 
-.page__bio {
-  margin-bottom: var(--space-lg);
+.page__session :deep(.term__body) {
+  display: grid;
+  gap: var(--space-xs);
 }
 
-.page__paragraph + .page__paragraph {
-  margin-top: var(--space-sm);
+.out {
+  color: var(--fg1);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-.page__subhead {
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg2);
-  margin: 0 0 var(--space-sm);
-}
-
-.page__tags {
+.out--tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  list-style: none;
+  padding: 0;
 }
 
-.page__tag {
+.tag {
   font-size: 12.5px;
   padding: 5px 12px;
   border-radius: 999px;

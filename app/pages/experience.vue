@@ -10,7 +10,7 @@ useSeoMeta({
 <template>
   <div class="page">
     <SectionHeading eyebrow="~/experience" title="Experience">
-      Roles and research, most recent first.
+      A commit log of roles and research, most recent first.
     </SectionHeading>
 
     <div class="page__timeline">

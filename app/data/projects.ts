@@ -1,4 +1,4 @@
-import type { Project } from '~/components/portfolio/ProjectCard.vue'
+import type { Project } from '~/components/portfolio/CaseFile.vue'
 
 /**
  * Add more entries here as new projects are ready to show — same shape as PSALM below.
