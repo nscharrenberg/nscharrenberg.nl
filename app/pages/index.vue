@@ -33,7 +33,7 @@ useSeoMeta({
         <IconCodeberg />
       </SocialLink>
       <span class="hero__divider" aria-hidden="true" />
-      <SocialLink href="/resume" label="Resume" internal>
+      <SocialLink href="/resume" label="Resume" internal show-label>
         <IconResume />
       </SocialLink>
     </nav>
@@ -74,6 +74,7 @@ useSeoMeta({
 
 .hero__socials {
   display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   align-items: center;
   justify-content: center;

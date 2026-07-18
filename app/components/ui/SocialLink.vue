@@ -4,24 +4,38 @@ interface Props {
   label: string
   /** Internal Nuxt route — renders a <NuxtLink> instead of an external <a target="_blank">. */
   internal?: boolean
+  /** Show the label as visible text next to the icon, instead of only on hover. */
+  showLabel?: boolean
 }
 
-withDefaults(defineProps<Props>(), { internal: false })
+withDefaults(defineProps<Props>(), { internal: false, showLabel: false })
 </script>
 
 <template>
-  <component
-    :is="internal ? 'NuxtLink' : 'a'"
+  <NuxtLink
+    v-if="internal"
+    :to="href"
     class="social"
-    :to="internal ? href : undefined"
-    :href="internal ? undefined : href"
-    :target="internal ? undefined : '_blank'"
-    :rel="internal ? undefined : 'me noopener noreferrer'"
-    :aria-label="label"
+    :class="{ 'social--labeled': showLabel }"
+    :aria-label="showLabel ? undefined : label"
   >
-    <span class="social__tooltip" role="tooltip">{{ label }}</span>
+    <span v-if="!showLabel" class="social__tooltip" role="tooltip">{{ label }}</span>
     <slot />
-  </component>
+    <span v-if="showLabel" class="social__label">{{ label }}</span>
+  </NuxtLink>
+  <a
+    v-else
+    :href="href"
+    target="_blank"
+    rel="me noopener noreferrer"
+    class="social"
+    :class="{ 'social--labeled': showLabel }"
+    :aria-label="showLabel ? undefined : label"
+  >
+    <span v-if="!showLabel" class="social__tooltip" role="tooltip">{{ label }}</span>
+    <slot />
+    <span v-if="showLabel" class="social__label">{{ label }}</span>
+  </a>
 </template>
 
 <style scoped>
@@ -79,5 +93,26 @@ withDefaults(defineProps<Props>(), { internal: false })
 .social:focus-visible .social__tooltip {
   opacity: 1;
   transform: translate(-50%, calc(-100% - 4px));
+}
+
+/* --- labeled variant: icon + always-visible text, e.g. the resume link --- */
+.social--labeled {
+  display: inline-flex;
+  flex-direction: row;
+  width: auto;
+  height: 40px;
+  padding: 0 16px 0 12px;
+  gap: 8px;
+}
+
+.social--labeled :deep(svg) {
+  width: 18px;
+  height: 18px;
+}
+
+.social__label {
+  font-size: 13px;
+  color: var(--fg0);
+  white-space: nowrap;
 }
 </style>
