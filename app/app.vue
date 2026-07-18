@@ -21,6 +21,14 @@ useHead({
       }),
     },
   ],
+  // <Reveal> content starts at opacity:0 and is only shown once JS runs an
+  // IntersectionObserver. If JS fails to load/execute, that content would
+  // stay invisible forever for sighted users (it's still in the SSR HTML,
+  // so crawlers/screen readers are unaffected either way) — force it visible
+  // when JS isn't available at all.
+  noscript: [
+    { innerHTML: '<style>.reveal{opacity:1!important;transform:none!important}</style>' },
+  ],
 })
 </script>
 

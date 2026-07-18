@@ -26,6 +26,19 @@ a {
   outline-offset: 2px;
 }
 
+/* Route transitions (app.pageTransition in nuxt.config.ts) */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 240ms ease, filter 240ms ease, transform 240ms ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(3px);
+  transform: translateY(6px);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

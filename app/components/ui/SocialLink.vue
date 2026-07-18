@@ -8,7 +8,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <a class="social" :href="href" target="_blank" rel="me noreferrer" :aria-label="label">
+  <a class="social" :href="href" target="_blank" rel="me noopener noreferrer" :aria-label="label">
     <span class="social__tooltip" role="tooltip">{{ label }}</span>
     <slot />
   </a>

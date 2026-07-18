@@ -14,7 +14,13 @@ useSeoMeta({
     </SectionHeading>
 
     <div class="page__timeline">
-      <TimelineItem v-for="entry in experience" :key="`${entry.org}-${entry.period}`" :entry="entry" />
+      <Reveal
+        v-for="(entry, i) in experience"
+        :key="`${entry.org}-${entry.period}`"
+        :delay="i * 90"
+      >
+        <TimelineItem :entry="entry" :is-last="i === experience.length - 1" />
+      </Reveal>
     </div>
   </div>
 </template>

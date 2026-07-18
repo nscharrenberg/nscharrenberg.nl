@@ -16,13 +16,13 @@ useSeoMeta({
     </SectionHeading>
 
     <ul v-if="posts?.length" class="page__list">
-      <li v-for="post in posts" :key="post.path" class="page__item">
+      <Reveal v-for="(post, i) in posts" :key="post.path" tag="li" :delay="i * 70">
         <NuxtLink :to="post.path" class="page__link">
           <span class="page__date">{{ post.date }}</span>
-          <span class="page__title">{{ post.title }}</span>
+          <span class="page__title">{{ post.title }} <span class="page__arrow">→</span></span>
           <span class="page__desc">{{ post.description }}</span>
         </NuxtLink>
-      </li>
+      </Reveal>
     </ul>
     <p v-else class="page__empty">Nothing published yet.</p>
   </div>
@@ -45,8 +45,28 @@ useSeoMeta({
   display: grid;
   grid-template-columns: 100px 1fr;
   gap: var(--space-sm);
-  padding: var(--space-sm) 0;
+  padding: var(--space-sm) 4px;
+  margin: 0 -4px;
+  border-radius: var(--radius-sm);
   border-bottom: 1px solid var(--line);
+  transition: background var(--dur-hover) ease;
+}
+
+.page__link:hover {
+  background: var(--bg1);
+}
+
+.page__arrow {
+  display: inline-block;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity var(--dur-hover) ease, transform var(--dur-hover) ease;
+}
+
+.page__link:hover .page__arrow {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .page__date {

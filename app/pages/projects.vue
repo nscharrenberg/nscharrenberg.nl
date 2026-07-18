@@ -14,7 +14,9 @@ useSeoMeta({
     </SectionHeading>
 
     <div class="page__grid">
-      <ProjectCard v-for="project in projects" :key="project.title" :project="project" />
+      <Reveal v-for="(project, i) in projects" :key="project.title" :delay="i * 80">
+        <ProjectCard :project="project" />
+      </Reveal>
     </div>
   </div>
 </template>

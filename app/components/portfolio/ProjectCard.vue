@@ -12,33 +12,63 @@ export interface Project {
 }
 
 defineProps<{ project: Project }>()
+
+const prefersReducedMotion = usePrefersReducedMotion()
+
+function onMove(e: MouseEvent) {
+  if (prefersReducedMotion.value) return
+  const el = e.currentTarget as HTMLElement
+  const rect = el.getBoundingClientRect()
+  el.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`)
+  el.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`)
+}
 </script>
 
 <template>
-  <article class="card">
-    <h3 class="card__title">{{ project.title }}</h3>
+  <article class="card" @mousemove="onMove">
+    <h2 class="card__title">{{ project.title }}</h2>
     <p class="card__summary">{{ project.summary }}</p>
     <ul class="card__stack">
       <li v-for="tech in project.stack" :key="tech" class="card__tag">{{ tech }}</li>
     </ul>
     <div class="card__links">
-      <a v-for="link in project.links" :key="link.href" :href="link.href" target="_blank" rel="noreferrer" class="card__link">{{ link.label }} →</a>
+      <a v-for="link in project.links" :key="link.href" :href="link.href" target="_blank" rel="noopener noreferrer" class="card__link">{{ link.label }} →</a>
     </div>
   </article>
 </template>
 
 <style scoped>
 .card {
+  position: relative;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--bg1);
   padding: var(--space-md);
+  overflow: hidden;
   transition: border-color var(--dur-hover) ease, transform var(--dur-hover) ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgb(255 106 0 / 12%), transparent 65%);
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .card:hover {
   border-color: rgb(255 106 0 / 30%);
   transform: translateY(-2px);
+}
+
+.card > * {
+  position: relative;
 }
 
 .card__title {

@@ -10,7 +10,7 @@ defineProps<Props>()
 <template>
   <header class="heading">
     <p class="heading__eyebrow">{{ eyebrow }}</p>
-    <h1 class="heading__title">{{ title }}</h1>
+    <DecryptText tag="h1" :text="title" class="heading__title" />
     <p v-if="$slots.default" class="heading__lede">
       <slot />
     </p>

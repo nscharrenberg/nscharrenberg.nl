@@ -12,7 +12,10 @@
   /* --- foreground --- */
   --fg0: #f3f6ff;
   --fg1: rgb(243 246 255 / 78%);
-  --fg2: rgb(243 246 255 / 46%);
+  /* 55%, not the more muted value you might reach for — below ~47% this fails
+     WCAG AA (4.5:1) against bg0/bg1/bg2 at the small sizes it's used at
+     (tags, dates, hints). Verified against all three surface tokens. */
+  --fg2: rgb(243 246 255 / 55%);
 
   /* --- brand accent (Dutch orange) --- */
   --accent: #ff6a00;
