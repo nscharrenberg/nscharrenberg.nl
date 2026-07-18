@@ -132,3 +132,47 @@ a {
   padding-left: var(--space-sm);
   color: var(--fg2);
 }
+
+/*
+ * Print — reskins the whole design-token system to a light, ink-friendly
+ * palette (everything already reads colors through these custom
+ * properties, so redefining them here cascades through every component
+ * without per-component overrides) and strips decorative chrome that has
+ * no business on paper. Applies to any page, not just /resume — hitting
+ * Ctrl+P anywhere shouldn't print a dark background and a sticky nav.
+ */
+@media print {
+  :root {
+    --bg0: #ffffff;
+    --bg1: #f7f7f8;
+    --bg2: #eeeeef;
+    --fg0: #16181d;
+    --fg1: rgb(22 24 29 / 82%);
+    --fg2: rgb(22 24 29 / 55%);
+    --line: rgb(0 0 0 / 12%);
+    --line-strong: rgb(0 0 0 / 24%);
+    --accent: #b34e00;
+    --accent2: #8a3c00;
+    --glitch2: #067a3e;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .nav,
+  .micro,
+  .ambient,
+  .crt,
+  .skip-link,
+  .boot,
+  .overlay,
+  .no-print {
+    display: none !important;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    display: none !important;
+  }
+}

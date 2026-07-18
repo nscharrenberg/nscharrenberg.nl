@@ -8,6 +8,7 @@ const links = [
   { to: '/projects', path: '~/projects' },
   { to: '/experience', path: '~/experience' },
   { to: '/writing', path: '~/writing' },
+  { to: '/resume', path: '~/resume' },
 ]
 
 function isActive(to: string) {
