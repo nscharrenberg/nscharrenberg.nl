@@ -2,16 +2,26 @@
 interface Props {
   href: string
   label: string
+  /** Internal Nuxt route — renders a <NuxtLink> instead of an external <a target="_blank">. */
+  internal?: boolean
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), { internal: false })
 </script>
 
 <template>
-  <a class="social" :href="href" target="_blank" rel="me noopener noreferrer" :aria-label="label">
+  <component
+    :is="internal ? 'NuxtLink' : 'a'"
+    class="social"
+    :to="internal ? href : undefined"
+    :href="internal ? undefined : href"
+    :target="internal ? undefined : '_blank'"
+    :rel="internal ? undefined : 'me noopener noreferrer'"
+    :aria-label="label"
+  >
     <span class="social__tooltip" role="tooltip">{{ label }}</span>
     <slot />
-  </a>
+  </component>
 </template>
 
 <style scoped>

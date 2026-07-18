@@ -32,6 +32,10 @@ useSeoMeta({
       <SocialLink href="https://codeberg.org/nscharrenberg" label="Codeberg">
         <IconCodeberg />
       </SocialLink>
+      <span class="hero__divider" aria-hidden="true" />
+      <SocialLink href="/resume" label="Resume" internal>
+        <IconResume />
+      </SocialLink>
     </nav>
   </section>
 </template>
@@ -74,5 +78,11 @@ useSeoMeta({
   align-items: center;
   justify-content: center;
   margin-top: 6px;
+}
+
+.hero__divider {
+  width: 1px;
+  height: 24px;
+  background: var(--line-strong);
 }
 </style>

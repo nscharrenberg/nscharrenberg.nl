@@ -11,6 +11,7 @@ const STATIC_COMMANDS: Command[] = [
   { label: 'Projects', hint: '~/projects', path: '/projects' },
   { label: 'Experience', hint: '~/experience', path: '/experience' },
   { label: 'Writing', hint: '~/writing', path: '/writing' },
+  { label: 'Resume', hint: '~/resume', path: '/resume' },
 ]
 
 const { isOpen, close } = useCommandPalette()
