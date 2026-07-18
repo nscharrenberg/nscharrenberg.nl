@@ -1,10 +1,14 @@
 <script setup lang="ts">
+export interface ProjectLink {
+  label: string
+  href: string
+}
+
 export interface Project {
   title: string
   summary: string
   stack: string[]
-  repoHref?: string
-  demoHref?: string
+  links: ProjectLink[]
 }
 
 defineProps<{ project: Project }>()
@@ -18,8 +22,7 @@ defineProps<{ project: Project }>()
       <li v-for="tech in project.stack" :key="tech" class="card__tag">{{ tech }}</li>
     </ul>
     <div class="card__links">
-      <a v-if="project.repoHref" :href="project.repoHref" target="_blank" rel="noreferrer" class="card__link">Source →</a>
-      <a v-if="project.demoHref" :href="project.demoHref" target="_blank" rel="noreferrer" class="card__link">Live →</a>
+      <a v-for="link in project.links" :key="link.href" :href="link.href" target="_blank" rel="noreferrer" class="card__link">{{ link.label }} →</a>
     </div>
   </article>
 </template>
@@ -70,7 +73,8 @@ defineProps<{ project: Project }>()
 
 .card__links {
   display: flex;
-  gap: var(--space-sm);
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
 }
 
 .card__link {

@@ -1,22 +1,18 @@
 import type { Project } from '~/components/portfolio/ProjectCard.vue'
 
 /**
- * TODO: replace these placeholder entries with real projects.
- * Each card renders title/summary/stack/links exactly as given here —
- * there's no other content source to update.
+ * Add more entries here as new projects are ready to show — same shape as PSALM below.
  */
 export const projects: Project[] = [
   {
-    title: 'Example Project One',
+    title: 'PSALM',
     summary:
-      'Replace with a one- or two-sentence outcome-focused summary: what it does, what problem it solved, and any measurable result.',
-    stack: ['Python', 'PyTorch', 'FastAPI'],
-    repoHref: 'https://github.com/nscharrenberg',
-  },
-  {
-    title: 'Example Project Two',
-    summary: 'Replace with another project — case studies read better than a bare feature list.',
-    stack: ['TypeScript', 'Vue'],
-    repoHref: 'https://codeberg.org/nscharrenberg',
+      'A thesis project building an LLM-as-a-judge framework for evaluating copyright infringement under EU law. PSALM scores stylistic appropriation in fine-tuned language models across ten dimensions, from computational overlap to statutory exceptions like parody and pastiche, and was tested against Llama 3.2 models fine-tuned on Dutch literary works.',
+    stack: ['Python', 'PyTorch', 'Jupyter', 'Docker'],
+    links: [
+      { label: 'Repository', href: 'https://codeberg.org/nscharrenberg/PSALM' },
+      { label: 'Preprint (arXiv)', href: 'https://arxiv.org/abs/2606.31250' },
+      { label: 'Literature review (NLLP 2025)', href: 'https://aclanthology.org/2025.nllp-1.9/' },
+    ],
   },
 ]
