@@ -10,12 +10,12 @@ useSeoMeta({
 <template>
   <div class="page">
     <SectionHeading eyebrow="~/projects" title="Projects">
-      A selection of things built and shipped.
+      Case files on things built and shipped.
     </SectionHeading>
 
-    <div class="page__grid">
+    <div class="page__stack">
       <Reveal v-for="(project, i) in projects" :key="project.title" :delay="i * 80">
-        <ProjectCard :project="project" />
+        <CaseFile :project="project" :index="i" />
       </Reveal>
     </div>
   </div>
@@ -23,14 +23,14 @@ useSeoMeta({
 
 <style scoped>
 .page {
-  max-width: 960px;
+  max-width: 820px;
   margin: 0 auto;
   padding: var(--space-2xl) clamp(16px, 4vw, 40px);
 }
 
-.page__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+.page__stack {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-md);
 }
 </style>

@@ -3,6 +3,18 @@ const { data: posts } = await useAsyncData('writing-index', () =>
   queryCollection('writing').order('date', 'DESC').all(),
 )
 
+const rows = computed(() =>
+  (posts.value ?? []).map((post) => {
+    const words = countWords(post.body)
+    return {
+      ...post,
+      filename: `${post.path.split('/').pop()}.md`,
+      size: estimateFileSize(words),
+      readMinutes: estimateReadMinutes(words),
+    }
+  }),
+)
+
 useSeoMeta({
   title: 'Writing',
   description: 'Notes and posts by Noah Scharrenberg.',
@@ -15,15 +27,33 @@ useSeoMeta({
       Notes on AI/ML, software engineering, and whatever else is worth writing down.
     </SectionHeading>
 
-    <ul v-if="posts?.length" class="page__list">
-      <Reveal v-for="(post, i) in posts" :key="post.path" tag="li" :delay="i * 70">
-        <NuxtLink :to="post.path" class="page__link">
-          <span class="page__date">{{ post.date }}</span>
-          <span class="page__title">{{ post.title }} <span class="page__arrow">→</span></span>
-          <span class="page__desc">{{ post.description }}</span>
-        </NuxtLink>
-      </Reveal>
-    </ul>
+    <template v-if="rows.length">
+      <CommandLine path="~/writing" command="ls -la" />
+
+      <div class="listing">
+        <div class="listing__head" aria-hidden="true">
+          <span>Name</span>
+          <span>Size</span>
+          <span>Date</span>
+        </div>
+
+        <ul class="listing__list">
+          <Reveal v-for="(post, i) in rows" :key="post.path" tag="li" :delay="i * 70">
+            <NuxtLink :to="post.path" class="listing__row">
+              <span class="listing__name">
+                {{ post.filename }}
+                <span class="listing__desc">{{ post.description }}</span>
+                <span class="listing__tags">
+                  <span v-for="tag in post.tags" :key="tag" class="listing__tag">#{{ tag }}</span>
+                </span>
+              </span>
+              <span class="listing__size">{{ post.size }} · {{ post.readMinutes }} min read</span>
+              <span class="listing__date">{{ post.date }}</span>
+            </NuxtLink>
+          </Reveal>
+        </ul>
+      </div>
+    </template>
     <p v-else class="page__empty">Nothing published yet.</p>
   </div>
 </template>
@@ -35,59 +65,87 @@ useSeoMeta({
   padding: var(--space-2xl) clamp(16px, 4vw, 40px);
 }
 
-.page__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
+.listing {
+  margin-top: var(--space-md);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-.page__link {
+.listing__head {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 1fr 180px 110px;
   gap: var(--space-sm);
-  padding: var(--space-sm) 4px;
-  margin: 0 -4px;
-  border-radius: var(--radius-sm);
+  padding: 10px var(--space-sm);
+  background: var(--bg1);
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg2);
+}
+
+@media (max-width: 640px) {
+  .listing__head {
+    display: none;
+  }
+}
+
+.listing__row {
+  display: grid;
+  grid-template-columns: 1fr 180px 110px;
+  gap: var(--space-sm);
+  align-items: baseline;
+  padding: var(--space-sm);
   border-bottom: 1px solid var(--line);
   transition: background var(--dur-hover) ease;
 }
 
-.page__link:hover {
+.listing__row:hover {
   background: var(--bg1);
 }
 
-.page__arrow {
-  display: inline-block;
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity var(--dur-hover) ease, transform var(--dur-hover) ease;
+@media (max-width: 640px) {
+  .listing__row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 
-.page__link:hover .page__arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.page__date {
-  font-size: 12px;
-  color: var(--fg2);
-  font-variant-numeric: tabular-nums;
-}
-
-.page__title {
-  display: block;
+.listing__name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   color: var(--fg0);
   font-weight: 700;
-  font-size: 14.5px;
-  margin-bottom: 4px;
+  font-size: 14px;
 }
 
-.page__desc {
-  display: block;
-  grid-column: 2;
+.listing__desc {
   color: var(--fg1);
+  font-weight: 400;
   font-size: 13px;
+}
+
+.listing__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.listing__tag {
+  color: var(--accent);
+  font-weight: 400;
+  font-size: 11.5px;
+}
+
+.listing__size,
+.listing__date {
+  color: var(--fg2);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .page__empty {

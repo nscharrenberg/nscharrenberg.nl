@@ -1,7 +1,12 @@
+<script setup lang="ts">
+const route = useRoute()
+</script>
+
 <template>
   <div class="shell">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <CrtOverlay />
+    <AmbientGlyphs v-if="route.path === '/'" />
     <CommandNav />
     <main id="main-content" class="shell__main" tabindex="-1">
       <slot />
