@@ -17,7 +17,7 @@ withDefaults(defineProps<{ entry: TimelineEntry; isLast?: boolean }>(), { isLast
     </div>
     <div class="item__body">
       <p class="item__period">{{ entry.period }}</p>
-      <h3 class="item__role">{{ entry.role }} <span class="item__org">· {{ entry.org }}</span></h3>
+      <h2 class="item__role">{{ entry.role }} <span class="item__org">· {{ entry.org }}</span></h2>
       <p class="item__summary">{{ entry.summary }}</p>
     </div>
   </article>

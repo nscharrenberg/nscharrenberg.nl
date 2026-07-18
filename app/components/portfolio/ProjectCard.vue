@@ -26,13 +26,13 @@ function onMove(e: MouseEvent) {
 
 <template>
   <article class="card" @mousemove="onMove">
-    <h3 class="card__title">{{ project.title }}</h3>
+    <h2 class="card__title">{{ project.title }}</h2>
     <p class="card__summary">{{ project.summary }}</p>
     <ul class="card__stack">
       <li v-for="tech in project.stack" :key="tech" class="card__tag">{{ tech }}</li>
     </ul>
     <div class="card__links">
-      <a v-for="link in project.links" :key="link.href" :href="link.href" target="_blank" rel="noreferrer" class="card__link">{{ link.label }} →</a>
+      <a v-for="link in project.links" :key="link.href" :href="link.href" target="_blank" rel="noopener noreferrer" class="card__link">{{ link.label }} →</a>
     </div>
   </article>
 </template>

@@ -15,6 +15,11 @@ const STATIC_COMMANDS: Command[] = [
 
 const { isOpen, close } = useCommandPalette()
 
+const LISTBOX_ID = 'cmdk-listbox'
+function optionId(i: number) {
+  return `cmdk-option-${i}`
+}
+
 const query = ref('')
 const activeIndex = ref(0)
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -48,6 +53,11 @@ watch(results, () => {
 })
 
 watch(isOpen, async (open) => {
+  // Hide/disable the rest of the app from focus and the accessibility tree
+  // while the modal is open — CommandPalette itself lives outside #__nuxt
+  // (teleported to <body>), so this doesn't affect the palette.
+  document.getElementById('__nuxt')?.toggleAttribute('inert', open)
+
   if (open) {
     triggerToRefocus.value = (document.activeElement as HTMLElement) ?? null
     query.value = ''
@@ -78,6 +88,11 @@ function onKeydown(e: KeyboardEvent) {
     if (command) select(command)
   } else if (e.key === 'Escape') {
     close()
+  } else if (e.key === 'Tab') {
+    // The input is the only real tab stop in here — keep focus trapped in
+    // the dialog rather than letting it escape to (inert, but still) DOM
+    // order elsewhere.
+    e.preventDefault()
   }
 }
 
@@ -106,18 +121,24 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown))
               ref="inputRef"
               v-model="query"
               type="text"
+              role="combobox"
               class="panel__input"
               placeholder="Search pages and posts..."
               autocomplete="off"
               spellcheck="false"
+              aria-autocomplete="list"
+              aria-expanded="true"
+              :aria-controls="LISTBOX_ID"
+              :aria-activedescendant="results.length ? optionId(activeIndex) : undefined"
               @keydown="onKeydown"
             >
             <kbd class="panel__esc">esc</kbd>
           </div>
 
-          <ul v-if="results.length" class="panel__list" role="listbox">
+          <ul v-if="results.length" :id="LISTBOX_ID" class="panel__list" role="listbox">
             <li
               v-for="(command, i) in results"
+              :id="optionId(i)"
               :key="command.path"
               role="option"
               :aria-selected="i === activeIndex"
