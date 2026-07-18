@@ -175,4 +175,13 @@ a {
   .glitch::after {
     display: none !important;
   }
+
+  /* <Reveal> content only becomes visible once its IntersectionObserver has
+     fired on scroll. A page can be printed before every section has been
+     scrolled past on screen (e.g. the resume's "Download PDF" button sits
+     above the fold), which would otherwise print those sections blank. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TimelineEntry } from '~/components/portfolio/TimelineItem.vue'
 import { bio, focusAreas } from '~/data/about'
 import { education } from '~/data/education'
 import { experience } from '~/data/experience'
@@ -12,13 +13,91 @@ useSeoMeta({
 function downloadPdf() {
   window.print()
 }
+
+function slug(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
+function startYear(period: string) {
+  return Number(period.match(/\d{4}/)?.[0] ?? 0)
+}
+
+const CURRENT_YEAR = new Date().getFullYear()
+const oldestStart = Math.min(...[...experience, ...education].map((entry) => startYear(entry.period)))
+const currentRoleCount = experience.filter((entry) => /present/i.test(entry.period)).length
+
+const stats = [
+  { label: 'Years in tech', value: CURRENT_YEAR - oldestStart },
+  { label: 'Degrees earned', value: education.length },
+  { label: 'Focus areas', value: focusAreas.length },
+  { label: 'Roles active now', value: currentRoleCount },
+]
+
+type ProcessKind = 'work' | 'edu'
+interface ProcessEntry extends TimelineEntry {
+  kind: ProcessKind
+  current: boolean
+  pid: number
+}
+
+function toProcessEntry(kind: ProcessKind, offset: number) {
+  return (entry: TimelineEntry, i: number): ProcessEntry => ({
+    ...entry,
+    kind,
+    current: /present/i.test(entry.period),
+    pid: offset + i * 37,
+  })
+}
+
+const timeline: ProcessEntry[] = [
+  ...experience.map(toProcessEntry('work', 4200)),
+  ...education.map(toProcessEntry('edu', 8100)),
+].sort((a, b) => startYear(b.period) - startYear(a.period))
+
+const statsEl = ref<HTMLElement | null>(null)
+const prefersReducedMotion = usePrefersReducedMotion()
+
+onMounted(() => {
+  if (prefersReducedMotion.value) return
+
+  const { stop } = useIntersectionObserver(
+    statsEl,
+    ([entry]) => {
+      if (!entry?.isIntersecting) return
+      stop()
+
+      const nodes = statsEl.value?.querySelectorAll<HTMLElement>('.stat__value') ?? []
+      nodes.forEach((node, i) => {
+        const target = Number(node.textContent)
+        if (!Number.isFinite(target)) return
+
+        const duration = 800
+        const startAt = performance.now() + i * 90
+
+        const tick = (now: number) => {
+          const elapsed = now - startAt
+          if (elapsed < 0) {
+            requestAnimationFrame(tick)
+            return
+          }
+          const progress = Math.min(elapsed / duration, 1)
+          const eased = 1 - (1 - progress) ** 3
+          node.textContent = String(Math.round(target * eased))
+          if (progress < 1) requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+      })
+    },
+    { threshold: 0.4 },
+  )
+})
 </script>
 
 <template>
   <div class="page">
     <div class="page__top no-print">
       <SectionHeading eyebrow="~/resume" title="Resume">
-        Everything above, parsed into one file you can take with you.
+        Everything above, running as one process.
       </SectionHeading>
       <button type="button" class="download" @click="downloadPdf">
         <IconResume />
@@ -29,113 +108,122 @@ function downloadPdf() {
       Opens your browser's print dialog — choose "Save as PDF" as the destination.
     </p>
 
-    <Reveal>
-      <article class="resume">
-        <CommandLine path="~/resume" command="cat resume.yaml" class="resume__cmd" />
+    <article class="cv">
+      <Reveal tag="header" class="cv__header">
+        <CommandLine path="~/resume" command="whoami" />
+        <p class="cv__name">Noah Scharrenberg</p>
+        <p class="cv__role">AI Engineer · Software Engineer</p>
+      </Reveal>
 
-        <p class="yaml__comment"># curriculum vitae</p>
-
-        <dl class="yaml__map yaml__map--root">
-          <div class="yaml__pair">
-            <dt>name</dt>
-            <dd>Noah Scharrenberg</dd>
+      <Reveal tag="section" class="cv__stats" aria-label="At a glance">
+        <div ref="statsEl" class="stats">
+          <div v-for="stat in stats" :key="stat.label" class="stat">
+            <span class="stat__value">{{ stat.value }}</span>
+            <span class="stat__label">{{ stat.label }}</span>
           </div>
-          <div class="yaml__pair">
-            <dt>role</dt>
-            <dd>AI Engineer · Software Engineer</dd>
-          </div>
-        </dl>
+        </div>
+      </Reveal>
 
-        <section class="yaml__section">
-          <h2 class="yaml__key">summary<span class="yaml__punct">: |</span></h2>
-          <div class="yaml__body">
-            <p v-for="(paragraph, i) in bio" :key="i" class="yaml__scalar">{{ paragraph }}</p>
-          </div>
-        </section>
+      <Reveal tag="section" class="cv__section">
+        <CommandLine path="~/resume" command="cat summary.md" />
+        <h2 class="visually-hidden">Summary</h2>
+        <p v-for="(paragraph, i) in bio" :key="i" class="cv__prose">{{ paragraph }}</p>
+      </Reveal>
 
-        <section class="yaml__section">
-          <h2 class="yaml__key">skills<span class="yaml__punct">:</span></h2>
-          <ul class="yaml__body yaml__list">
-            <li v-for="area in focusAreas" :key="area" class="yaml__item">
-              <span class="yaml__dash" aria-hidden="true">-</span>{{ area }}
-            </li>
-          </ul>
-        </section>
-
-        <section class="yaml__section">
-          <h2 class="yaml__key">experience<span class="yaml__punct">:</span></h2>
-          <ul class="yaml__body yaml__list">
-            <li v-for="entry in experience" :key="`${entry.org}-${entry.period}`" class="yaml__item yaml__item--map">
-              <span class="yaml__dash" aria-hidden="true">-</span>
-              <dl class="yaml__map">
-                <div class="yaml__pair"><dt>role</dt><dd>{{ entry.role }}</dd></div>
-                <div class="yaml__pair"><dt>org</dt><dd>{{ entry.org }}</dd></div>
-                <div class="yaml__pair"><dt>period</dt><dd>{{ entry.period }}</dd></div>
-                <div class="yaml__pair yaml__pair--wrap"><dt>summary</dt><dd>{{ entry.summary }}</dd></div>
-              </dl>
-            </li>
-          </ul>
-        </section>
-
-        <section class="yaml__section">
-          <h2 class="yaml__key">education<span class="yaml__punct">:</span></h2>
-          <ul class="yaml__body yaml__list">
-            <li v-for="entry in education" :key="`${entry.org}-${entry.period}`" class="yaml__item yaml__item--map">
-              <span class="yaml__dash" aria-hidden="true">-</span>
-              <dl class="yaml__map">
-                <div class="yaml__pair"><dt>role</dt><dd>{{ entry.role }}</dd></div>
-                <div class="yaml__pair"><dt>org</dt><dd>{{ entry.org }}</dd></div>
-                <div class="yaml__pair"><dt>period</dt><dd>{{ entry.period }}</dd></div>
-                <div class="yaml__pair yaml__pair--wrap"><dt>summary</dt><dd>{{ entry.summary }}</dd></div>
-              </dl>
-            </li>
-          </ul>
-        </section>
-
-        <section class="yaml__section">
-          <h2 class="yaml__key">projects<span class="yaml__punct">:</span></h2>
-          <ul class="yaml__body yaml__list">
-            <li v-for="project in projects" :key="project.title" class="yaml__item yaml__item--map">
-              <span class="yaml__dash" aria-hidden="true">-</span>
-              <dl class="yaml__map">
-                <div class="yaml__pair"><dt>title</dt><dd>{{ project.title }}</dd></div>
-                <div class="yaml__pair yaml__pair--wrap"><dt>stack</dt><dd>[{{ project.stack.join(', ') }}]</dd></div>
-                <div class="yaml__pair yaml__pair--wrap"><dt>summary</dt><dd>{{ project.summary }}</dd></div>
-                <div class="yaml__pair yaml__pair--wrap">
-                  <dt>links</dt>
-                  <dd>
-                    <ul class="yaml__links">
-                      <li v-for="link in project.links" :key="link.href">
-                        <span class="yaml__dash" aria-hidden="true">-</span>
-                        <a :href="link.href" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-              </dl>
-            </li>
-          </ul>
-        </section>
-
-        <section class="yaml__section">
-          <h2 class="yaml__key">contact<span class="yaml__punct">:</span></h2>
-          <dl class="yaml__body yaml__map">
-            <div class="yaml__pair">
-              <dt>linkedin</dt>
-              <dd><a href="https://www.linkedin.com/in/nscharrenberg/" target="_blank" rel="noopener noreferrer">linkedin.com/in/nscharrenberg</a></dd>
+      <Reveal tag="section" class="cv__section">
+        <CommandLine path="~/resume" command="ps aux --sort=-start" />
+        <h2 class="visually-hidden">Experience and education</h2>
+        <ul class="proc">
+          <li v-for="entry in timeline" :key="`${entry.kind}-${entry.org}-${entry.period}`" class="proc__row">
+            <div class="proc__meta">
+              <span class="proc__status" :class="entry.current ? 'proc__status--running' : 'proc__status--done'">
+                <span class="proc__dot" aria-hidden="true" />
+                {{ entry.current ? 'RUNNING' : 'DONE' }}
+              </span>
+              <span class="proc__pid">PID {{ entry.pid }}</span>
+              <span class="proc__type" :class="`proc__type--${entry.kind}`">{{ entry.kind === 'work' ? 'WORK' : 'EDU' }}</span>
             </div>
-            <div class="yaml__pair">
-              <dt>github</dt>
-              <dd><a href="https://github.com/nscharrenberg" target="_blank" rel="noopener noreferrer">github.com/nscharrenberg</a></dd>
-            </div>
-            <div class="yaml__pair">
-              <dt>codeberg</dt>
-              <dd><a href="https://codeberg.org/nscharrenberg" target="_blank" rel="noopener noreferrer">codeberg.org/nscharrenberg</a></dd>
-            </div>
-          </dl>
-        </section>
-      </article>
-    </Reveal>
+            <p class="proc__cmd">
+              <span class="proc__role">{{ entry.role }}</span><span class="proc__at">@</span><span class="proc__org">{{ entry.org }}</span>
+              <span class="proc__period">{{ entry.period }}</span>
+            </p>
+            <p class="proc__summary"><span class="proc__tree" aria-hidden="true">└─</span>{{ entry.summary }}</p>
+          </li>
+        </ul>
+      </Reveal>
+
+      <Reveal tag="section" class="cv__section">
+        <CommandLine path="~/resume" command="tail -f skills.log" />
+        <h2 class="visually-hidden">Skills</h2>
+        <ul class="log">
+          <li v-for="(area, i) in focusAreas" :key="area" class="log__row">
+            <span class="log__time">[{{ (i * 0.041 + 0.012).toFixed(3) }}s]</span>
+            <span class="log__name">{{ slug(area) }}</span>
+            <span class="log__ok">OK</span>
+          </li>
+        </ul>
+      </Reveal>
+
+      <Reveal tag="section" class="cv__section">
+        <CommandLine path="~/resume" command="ls -la dist/" />
+        <h2 class="visually-hidden">Projects</h2>
+        <ul class="artifacts">
+          <li v-for="project in projects" :key="project.title" class="artifact">
+            <p class="artifact__row">
+              <span class="artifact__perm">-rwxr-xr-x</span>
+              <span class="artifact__name">{{ slug(project.title) }}.pkg</span>
+              <span class="artifact__stack">{{ project.stack.join(' · ') }}</span>
+            </p>
+            <p class="artifact__summary">{{ project.summary }}</p>
+            <p class="artifact__flags">
+              <a
+                v-for="link in project.links"
+                :key="link.href"
+                :href="link.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="artifact__flag"
+              >--{{ slug(link.label) }}</a>
+            </p>
+          </li>
+        </ul>
+      </Reveal>
+
+      <Reveal tag="section" class="cv__section cv__section--last">
+        <CommandLine path="~/resume" command="netstat -tlnp" />
+        <h2 class="visually-hidden">Contact</h2>
+        <table class="netstat">
+          <thead>
+            <tr>
+              <th scope="col">Proto</th>
+              <th scope="col">Service</th>
+              <th scope="col">Address</th>
+              <th scope="col">State</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>tcp</td>
+              <td>linkedin</td>
+              <td><a href="https://www.linkedin.com/in/nscharrenberg/" target="_blank" rel="noopener noreferrer">linkedin.com/in/nscharrenberg</a></td>
+              <td class="netstat__state">LISTEN</td>
+            </tr>
+            <tr>
+              <td>tcp</td>
+              <td>github</td>
+              <td><a href="https://github.com/nscharrenberg" target="_blank" rel="noopener noreferrer">github.com/nscharrenberg</a></td>
+              <td class="netstat__state">LISTEN</td>
+            </tr>
+            <tr>
+              <td>tcp</td>
+              <td>codeberg</td>
+              <td><a href="https://codeberg.org/nscharrenberg" target="_blank" rel="noopener noreferrer">codeberg.org/nscharrenberg</a></td>
+              <td class="netstat__state">LISTEN</td>
+            </tr>
+          </tbody>
+        </table>
+      </Reveal>
+    </article>
   </div>
 </template>
 
@@ -186,186 +274,360 @@ function downloadPdf() {
   margin: -8px 0 var(--space-lg);
 }
 
-.resume {
+.cv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* --- header --- */
+.cv__header {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--bg1);
-  padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 40px) clamp(24px, 4vw, 40px);
+  padding: clamp(20px, 4vw, 32px);
+}
+
+.cv__name {
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--fg0);
+  margin: var(--space-sm) 0 4px;
+}
+
+.cv__role {
+  font-size: 14px;
+  color: var(--fg1);
+  margin: 0;
+}
+
+/* --- stat strip --- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--line);
+  overflow: hidden;
+}
+
+.stat {
+  background: var(--bg1);
+  padding: clamp(16px, 3vw, 22px) clamp(10px, 2vw, 16px);
+  text-align: center;
+}
+
+.stat__value {
+  display: block;
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 24px rgb(255 106 0 / 18%);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg2);
+}
+
+@media (max-width: 560px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- shared section shell --- */
+.cv__section {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  padding: clamp(18px, 3.5vw, 28px);
+}
+
+.cv__prose {
   font-size: 13.5px;
   line-height: 1.7;
-}
-
-.resume__cmd {
-  margin-bottom: var(--space-lg);
-}
-
-.yaml__comment {
-  color: var(--fg2);
-  margin: 0 0 var(--space-md);
-}
-
-/* --- key: value mapping rows --- */
-.yaml__map {
-  margin: 0;
-}
-
-.yaml__map--root {
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-md);
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.yaml__map--root .yaml__pair dd {
-  font-size: 15px;
-  color: var(--fg0);
-  font-weight: 700;
-}
-
-.yaml__map--root .yaml__pair:last-child dd {
-  font-size: 13.5px;
-  font-weight: 400;
   color: var(--fg1);
+  margin: var(--space-md) 0 0;
 }
 
-.yaml__pair {
+.cv__prose + .cv__prose {
+  margin-top: 10px;
+}
+
+/* --- process table (experience + education) --- */
+.proc {
+  list-style: none;
+  margin: var(--space-md) 0 0;
+  padding: 0;
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 4px;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 
-.yaml__pair--wrap {
-  align-items: flex-start;
-}
-
-.yaml__pair:last-child {
-  margin-bottom: 0;
-}
-
-.yaml__pair dt {
-  flex-shrink: 0;
-  color: var(--fg2);
-}
-
-.yaml__pair dt::after {
-  content: ':';
-  color: var(--fg2);
-}
-
-.yaml__pair dd {
-  margin: 0;
-  color: var(--fg1);
-}
-
-.yaml__pair dd a {
-  color: var(--accent2);
-}
-
-/* --- top-level section keys, styled as literal yaml, not headings --- */
-.yaml__section {
-  margin-top: var(--space-md);
+.proc__row {
   padding-top: var(--space-md);
   border-top: 1px solid var(--line);
 }
 
-.yaml__section:first-of-type {
-  margin-top: 0;
+.proc__row:first-child {
   padding-top: 0;
   border-top: none;
 }
 
-.yaml__key {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--accent);
-  margin: 0 0 var(--space-sm);
-}
-
-.yaml__punct {
-  color: var(--fg2);
-  font-weight: 400;
-}
-
-/* --- indented block under a key, guided by a dashed rule like an editor's indent guide --- */
-.yaml__body {
-  margin: 0;
-  padding-left: 18px;
-  border-left: 1px dashed var(--line-strong);
-}
-
-.yaml__scalar {
-  margin: 0 0 8px;
-  color: var(--fg1);
-}
-
-.yaml__scalar:last-child {
-  margin-bottom: 0;
-}
-
-.yaml__list {
-  list-style: none;
-  padding-left: 18px;
-}
-
-.yaml__item {
-  color: var(--fg1);
-  margin-bottom: 6px;
-}
-
-.yaml__item:last-child {
-  margin-bottom: 0;
-}
-
-.yaml__dash {
-  color: var(--glitch2);
-  margin-right: 8px;
-}
-
-.yaml__item--map {
+.proc__meta {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: var(--space-sm);
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
 }
 
-.yaml__item--map:last-child {
-  margin-bottom: 0;
+.proc__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
 }
 
-.yaml__item--map > .yaml__dash {
-  flex-shrink: 0;
-  margin-top: 1px;
+.proc__status--running {
+  color: var(--glitch2);
 }
 
-.yaml__item--map .yaml__map {
-  flex: 1;
-  min-width: 0;
+.proc__status--done {
+  color: var(--fg2);
 }
 
-.yaml__item--map .yaml__pair dt {
-  min-width: 62px;
+.proc__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentcolor;
 }
 
-.yaml__links {
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 0;
+.proc__status--running .proc__dot {
+  animation: proc-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes proc-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgb(0 255 123 / 45%); }
+  50% { opacity: 0.55; box-shadow: 0 0 0 4px rgb(0 255 123 / 0%); }
+}
+
+.proc__pid {
+  color: var(--fg2);
+}
+
+.proc__type {
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--line-strong);
+  font-weight: 700;
+}
+
+.proc__type--work {
+  color: var(--accent);
+}
+
+.proc__type--edu {
+  color: var(--accent2);
+}
+
+.proc__cmd {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px var(--space-md);
+  align-items: baseline;
+  gap: 2px 8px;
+  margin: 0 0 4px;
+  font-size: 14px;
 }
 
-.yaml__links li {
+.proc__role {
+  color: var(--fg0);
+  font-weight: 700;
+}
+
+.proc__at {
+  color: var(--fg2);
+}
+
+.proc__org {
+  color: var(--fg1);
+}
+
+.proc__period {
+  margin-left: auto;
+  color: var(--fg2);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.proc__summary {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding-left: 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--fg1);
+}
+
+.proc__tree {
+  flex-shrink: 0;
+  color: var(--line-strong);
+}
+
+/* --- skills boot log --- */
+.log {
+  list-style: none;
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log__row {
   display: flex;
   align-items: baseline;
+  gap: 10px;
+  font-size: 12.5px;
+}
+
+.log__time {
+  color: var(--fg2);
+  flex-shrink: 0;
+}
+
+.log__name {
+  color: var(--fg1);
+  flex: 1;
+}
+
+.log__ok {
+  color: var(--glitch2);
+  font-weight: 700;
+}
+
+/* --- project artifacts --- */
+.artifacts {
+  list-style: none;
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.artifact {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--line);
+}
+
+.artifact:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.artifact__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+
+.artifact__perm {
+  color: var(--fg2);
+}
+
+.artifact__name {
+  color: var(--fg0);
+  font-weight: 700;
+}
+
+.artifact__stack {
+  color: var(--fg2);
+  font-size: 12px;
+}
+
+.artifact__summary {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--fg1);
+  margin: 0 0 8px;
+}
+
+.artifact__flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin: 0;
+}
+
+.artifact__flag {
+  color: var(--accent2);
+  font-size: 12.5px;
+}
+
+/* --- contact table --- */
+.netstat {
+  width: 100%;
+  margin-top: var(--space-md);
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.netstat th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  font-weight: 400;
+  padding: 0 10px 8px 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.netstat td {
+  padding: 8px 10px 8px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg1);
+  white-space: nowrap;
+}
+
+.netstat td a {
+  color: var(--accent2);
+}
+
+.netstat__state {
+  color: var(--glitch2);
+  font-weight: 700;
+}
+
+.netstat tr:last-child td {
+  border-bottom: none;
 }
 
 @media (max-width: 560px) {
-  .yaml__pair {
-    flex-wrap: wrap;
+  .netstat {
+    display: block;
+    overflow-x: auto;
   }
+}
 
-  .yaml__item--map .yaml__pair dt {
-    min-width: 0;
+@media (prefers-reduced-motion: reduce) {
+  .proc__status--running .proc__dot {
+    animation: none;
   }
 }
 </style>
