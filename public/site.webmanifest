@@ -1,0 +1,9 @@
+{
+  "name": "Noah Scharrenberg",
+  "short_name": "Noah",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07080b",
+  "theme_color": "#ff6a00",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

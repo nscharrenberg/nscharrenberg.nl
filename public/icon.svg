@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 256 256"
+  role="img"
+  aria-label="N"
+>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff6a00" />
+      <stop offset="1" stop-color="#00ff7b" />
+    </linearGradient>
+
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b" />
+      <feColorMatrix
+        in="b"
+        type="matrix"
+        values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 0.55 0"
+        result="gb"
+      />
+      <feMerge>
+        <feMergeNode in="gb" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+      <stop offset="0" stop-color="#0b0d12" />
+      <stop offset="1" stop-color="#07080b" />
+    </radialGradient>
+  </defs>
+
+  <rect width="256" height="256" rx="52" fill="url(#bg)" />
+
+  <!-- Optical centering: nudge slightly right (and imperceptibly down). -->
+  <g transform="translate(12 2)" filter="url(#glow)" fill="url(#g)">
+    <path d="M64 186V70h26l60 74V70h26v116h-26l-60-74v74H64z" />
+  </g>
+</svg>
