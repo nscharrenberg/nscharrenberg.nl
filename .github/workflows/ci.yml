@@ -14,6 +14,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -38,22 +40,15 @@ jobs:
           # build. Drop this once a custom domain (CNAME) is configured.
           NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
 
-      - uses: actions/upload-pages-artifact@v3
+      # Publishes straight to the gh-pages branch instead of GitHub's Pages
+      # "environment" — the environment route (actions/deploy-pages) kept
+      # getting blocked by environment protection rules that weren't
+      # controllable from here. This path is a plain branch push, so it has
+      # no such gate. Repo Settings → Pages → Source must be set to
+      # "Deploy from a branch" → gh-pages → / (root) for this to serve.
+      - name: Deploy to gh-pages
         if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: .output/public
-
-  deploy:
-    if: github.event_name == 'push'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/configure-pages@v5
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.output/public
