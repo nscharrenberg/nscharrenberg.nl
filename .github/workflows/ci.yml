@@ -1,9 +1,8 @@
 name: CI
 
-# Push trigger is intentionally not scoped to `main` right now — deploying every
-# pushed branch to GitHub Pages so the site is viewable on mobile while still
-# in progress. Once this settles onto `main` as the usual workflow, tighten
-# `on.push.branches` back down to `[main]`.
+# Lint/typecheck/test/build run on every push and PR as a validation gate.
+# The actual "Deploy to gh-pages" step below is further scoped to pushes on
+# `main` only, so feature branches build but never touch the live site.
 on:
   push:
   pull_request:
@@ -47,7 +46,7 @@ jobs:
       # no such gate. Repo Settings → Pages → Source must be set to
       # "Deploy from a branch" → gh-pages → / (root) for this to serve.
       - name: Deploy to gh-pages
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
