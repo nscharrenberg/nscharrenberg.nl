@@ -6,6 +6,7 @@
       <slot />
     </main>
     <MicroStatus />
+    <CommandPalette />
   </div>
 </template>
 

@@ -13,6 +13,7 @@ useSeoMeta({
 
 <template>
   <section class="hero" aria-label="Homepage">
+    <BootSequence />
     <GlitchText tag="h1" :text="DISPLAY_NAME" class="hero__name" />
 
     <div class="hero__underline" aria-hidden="true" />

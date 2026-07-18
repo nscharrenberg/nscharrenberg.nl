@@ -13,14 +13,18 @@ useSeoMeta({
       Background and focus areas.
     </SectionHeading>
 
-    <TerminalWindow title="cat about.md" class="page__bio">
-      <p v-for="(paragraph, i) in bio" :key="i" class="page__paragraph">{{ paragraph }}</p>
-    </TerminalWindow>
+    <Reveal>
+      <TerminalWindow title="cat about.md" class="page__bio">
+        <p v-for="(paragraph, i) in bio" :key="i" class="page__paragraph">{{ paragraph }}</p>
+      </TerminalWindow>
+    </Reveal>
 
-    <h2 class="page__subhead">Focus areas</h2>
-    <ul class="page__tags">
-      <li v-for="area in focusAreas" :key="area" class="page__tag">{{ area }}</li>
-    </ul>
+    <Reveal :delay="120">
+      <h2 class="page__subhead">Focus areas</h2>
+      <ul class="page__tags">
+        <li v-for="area in focusAreas" :key="area" class="page__tag">{{ area }}</li>
+      </ul>
+    </Reveal>
   </div>
 </template>
 

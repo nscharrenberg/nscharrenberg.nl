@@ -19,7 +19,7 @@ useSeoMeta({
   <article v-if="page" class="page">
     <NuxtLink to="/writing" class="page__back">← ~/writing</NuxtLink>
     <p class="page__date">{{ page.date }}</p>
-    <h1 class="page__title">{{ page.title }}</h1>
+    <DecryptText tag="h1" :text="page.title" class="page__title" />
     <ContentRenderer :value="page" class="prose" />
   </article>
 </template>

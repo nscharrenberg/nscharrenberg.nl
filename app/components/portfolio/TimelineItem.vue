@@ -6,11 +6,11 @@ export interface TimelineEntry {
   summary: string
 }
 
-defineProps<{ entry: TimelineEntry }>()
+withDefaults(defineProps<{ entry: TimelineEntry; isLast?: boolean }>(), { isLast: false })
 </script>
 
 <template>
-  <article class="item">
+  <article class="item" :class="{ 'item--last': isLast }">
     <div class="item__rail" aria-hidden="true">
       <span class="item__dot" />
       <span class="item__line" />
@@ -44,6 +44,15 @@ defineProps<{ entry: TimelineEntry }>()
   box-shadow: 0 0 0 4px var(--accent-soft);
   flex-shrink: 0;
   margin-top: 6px;
+  transition: box-shadow var(--dur-hover) ease;
+}
+
+.item:hover .item__dot {
+  box-shadow: 0 0 0 6px var(--accent-soft);
+}
+
+.item:hover .item__role {
+  color: var(--accent);
 }
 
 .item__line {
@@ -53,7 +62,7 @@ defineProps<{ entry: TimelineEntry }>()
   margin-top: 6px;
 }
 
-.item:last-child .item__line {
+.item--last .item__line {
   display: none;
 }
 
@@ -74,6 +83,7 @@ defineProps<{ entry: TimelineEntry }>()
   font-weight: 700;
   color: var(--fg0);
   margin: 0 0 8px;
+  transition: color var(--dur-hover) ease;
 }
 
 .item__org {
