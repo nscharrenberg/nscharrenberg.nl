@@ -1,20 +1,16 @@
 import type { TimelineEntry } from '~/components/portfolio/TimelineItem.vue'
 
-/**
- * TODO: replace these placeholder entries with real roles/research,
- * most recent first.
- */
 export const experience: TimelineEntry[] = [
   {
-    role: 'Role title',
-    org: 'Organization',
-    period: '20XX — Present',
-    summary: 'One or two sentences on scope and impact — what you owned, what shipped.',
+    role: 'ML Engineer',
+    org: 'Contractuo',
+    period: '2024 — Present',
+    summary: 'Focused on document intelligence and legal AI.',
   },
   {
-    role: 'Earlier role',
-    org: 'Organization',
-    period: '20XX — 20XX',
-    summary: 'Same format, older first-to-oldest.',
+    role: 'Assistant Researcher',
+    org: 'Maastricht University',
+    period: '2026 — Present',
+    summary: 'Synthetic data generation for the NWO-TDCC SSH project on copyright and LLMs.',
   },
 ]
