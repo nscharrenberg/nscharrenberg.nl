@@ -1,0 +1,1 @@
+import{_ as s,o,s as r,j as n}from"./CMqNrqNR.js";const t={};function a(e,c){return o(),r("p",null,[n(e.$slots,"default")])}const l=Object.assign(s(t,[["render",a]]),{__name:"ProseP"});export{l as default};
