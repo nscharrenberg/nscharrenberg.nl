@@ -1,0 +1,54 @@
+name: CI
+
+# Push trigger is intentionally not scoped to `main` right now — deploying every
+# pushed branch to GitHub Pages so the site is viewable on mobile while still
+# in progress. Once this settles onto `main` as the usual workflow, tighten
+# `on.push.branches` back down to `[main]`.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      - name: Generate static site
+        run: pnpm generate
+        env:
+          # This repo isn't a `<user>.github.io` repo, so Pages serves it from
+          # a subpath (https://<user>.github.io/<repo>/) — bake that into the
+          # build. Drop this once a custom domain (CNAME) is configured.
+          NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
+
+      # Publishes straight to the gh-pages branch instead of GitHub's Pages
+      # "environment" — the environment route (actions/deploy-pages) kept
+      # getting blocked by environment protection rules that weren't
+      # controllable from here. This path is a plain branch push, so it has
+      # no such gate. Repo Settings → Pages → Source must be set to
+      # "Deploy from a branch" → gh-pages → / (root) for this to serve.
+      - name: Deploy to gh-pages
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.output/public

@@ -1,0 +1,13 @@
+export const bio = [
+  "I'm a software and machine learning engineer who ends up spending most of my time somewhere between the two: building models, then building the systems around them so they actually hold up outside a notebook. I like problems where language and structure meet, documents, contracts, and the kind of text that's messy on purpose.",
+  "Right now that mostly means legal AI and document intelligence. My thesis project, PSALM, looks at whether fine-tuned language models pick up and reproduce an author's writing style, and what that could mean for copyright law in the EU. I also spend a fair amount of time on synthetic data generation, teaching models to produce data realistic enough to be useful without exposing the real thing it came from.",
+]
+
+export const focusAreas: string[] = [
+  'Machine Learning',
+  'GenAI',
+  'Document Intelligence',
+  'Legal AI',
+  'Software Engineering',
+  'Synthetic Data Generation',
+]

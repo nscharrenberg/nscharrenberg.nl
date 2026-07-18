@@ -1,0 +1,17 @@
+# Noah Scharrenberg
+
+This site is the personal homepage and portfolio of Noah Scharrenberg (AI Engineer, Software Engineer).
+
+Primary URL:
+- https://nscharrenberg.nl/
+
+Profiles:
+- Codeberg: https://codeberg.org/nscharrenberg
+- GitHub: https://github.com/nscharrenberg
+- LinkedIn: https://www.linkedin.com/in/nscharrenberg/
+
+Built with:
+- Nuxt (Vue)
+
+Notes:
+- No tracking/analytics.
