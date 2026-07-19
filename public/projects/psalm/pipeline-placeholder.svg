@@ -1,0 +1,57 @@
+<svg viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pipelineTitle">
+  <title id="pipelineTitle">Illustrative pipeline diagram — placeholder, not a real system screenshot</title>
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0d12" />
+      <stop offset="100%" stop-color="#07080b" />
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10Z" fill="#ff6a00" />
+    </marker>
+  </defs>
+
+  <rect width="800" height="460" fill="url(#bgGrad)" />
+  <rect x="0.5" y="0.5" width="799" height="459" fill="none" stroke="rgb(255 255 255 / 10%)" />
+
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" fill="rgb(255 255 255 / 45%)">
+    <text x="24" y="34">$ psalm --pipeline --dry-run</text>
+  </g>
+
+  <!-- pipeline stages -->
+  <g font-family="ui-monospace, Menlo, Consolas, monospace">
+    <g>
+      <rect x="30" y="180" width="140" height="90" rx="8" fill="#0b0d12" stroke="rgb(255 255 255 / 18%)" />
+      <text x="100" y="218" font-size="12" fill="#f3f6ff" text-anchor="middle">Literary</text>
+      <text x="100" y="235" font-size="12" fill="#f3f6ff" text-anchor="middle">corpus</text>
+    </g>
+
+    <line x1="170" y1="225" x2="220" y2="225" stroke="#ff6a00" stroke-width="1.6" marker-end="url(#arrow)" />
+
+    <g>
+      <rect x="222" y="180" width="150" height="90" rx="8" fill="#0b0d12" stroke="rgb(255 255 255 / 18%)" />
+      <text x="297" y="218" font-size="12" fill="#f3f6ff" text-anchor="middle">Fine-tuned</text>
+      <text x="297" y="235" font-size="12" fill="#f3f6ff" text-anchor="middle">LLM</text>
+    </g>
+
+    <line x1="372" y1="225" x2="422" y2="225" stroke="#ff6a00" stroke-width="1.6" marker-end="url(#arrow)" />
+
+    <g>
+      <rect x="424" y="170" width="160" height="110" rx="8" fill="#0b0d12" stroke="#ff6a00" stroke-width="1.4" />
+      <text x="504" y="215" font-size="12" fill="#ff8a1f" text-anchor="middle">PSALM</text>
+      <text x="504" y="232" font-size="12" fill="#ff8a1f" text-anchor="middle">scorer</text>
+      <text x="504" y="252" font-size="10" fill="rgb(255 255 255 / 45%)" text-anchor="middle">10 dimensions</text>
+    </g>
+
+    <line x1="584" y1="225" x2="634" y2="225" stroke="#ff6a00" stroke-width="1.6" marker-end="url(#arrow)" />
+
+    <g>
+      <rect x="636" y="180" width="134" height="90" rx="8" fill="#0b0d12" stroke="rgb(255 255 255 / 18%)" />
+      <text x="703" y="218" font-size="12" fill="#00ff7b" text-anchor="middle">Report</text>
+      <text x="703" y="235" font-size="11" fill="rgb(255 255 255 / 45%)" text-anchor="middle">per-dimension</text>
+    </g>
+  </g>
+
+  <text x="24" y="430" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" fill="rgb(255 255 255 / 35%)">
+    Illustrative diagram — placeholder, not a real system screenshot.
+  </text>
+</svg>
