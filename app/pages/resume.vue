@@ -22,15 +22,18 @@ function startYear(period: string) {
   return Number(period.match(/\d{4}/)?.[0] ?? 0)
 }
 
-const CURRENT_YEAR = new Date().getFullYear()
+// Built at whatever moment the site was last generated, so this is only an
+// approximation until the client-side animation below recomputes it against
+// the visitor's real clock — otherwise it'd quietly go stale (e.g. show last
+// year's count) between rebuilds instead of ticking over on the actual date.
 const oldestStart = Math.min(...[...experience, ...education].map((entry) => startYear(entry.period)))
 const currentRoleCount = experience.filter((entry) => /present/i.test(entry.period)).length
 
 const stats = [
-  { label: 'Years in tech', value: CURRENT_YEAR - oldestStart },
-  { label: 'Degrees earned', value: education.length },
-  { label: 'Focus areas', value: focusAreas.length },
-  { label: 'Roles active now', value: currentRoleCount },
+  { label: 'Years in tech', value: new Date().getFullYear() - oldestStart, live: 'years-in-tech' },
+  { label: 'Degrees earned', value: education.length, live: null },
+  { label: 'Focus areas', value: focusAreas.length, live: null },
+  { label: 'Roles active now', value: currentRoleCount, live: null },
 ]
 
 interface ProcessEntry extends TimelineEntry {
@@ -68,7 +71,11 @@ onMounted(() => {
 
       const nodes = statsEl.value?.querySelectorAll<HTMLElement>('.stat__value') ?? []
       nodes.forEach((node, i) => {
-        const target = Number(node.textContent)
+        // Recompute against the visitor's actual clock rather than trusting
+        // the build-time value baked into the prerendered HTML.
+        const target = node.dataset.live === 'years-in-tech'
+          ? new Date().getFullYear() - oldestStart
+          : Number(node.textContent)
         if (!Number.isFinite(target)) return
 
         const duration = 800
@@ -119,7 +126,7 @@ onMounted(() => {
         <h2 class="cv__title cv__title--standalone">At a Glance</h2>
         <div ref="statsEl" class="stats">
           <div v-for="stat in stats" :key="stat.label" class="stat">
-            <span class="stat__value">{{ stat.value }}</span>
+            <span class="stat__value" :data-live="stat.live">{{ stat.value }}</span>
             <span class="stat__label">{{ stat.label }}</span>
           </div>
         </div>

@@ -29,4 +29,11 @@ withDefaults(defineProps<Props>(), { left: 'signal', right: 'stable' })
 .micro__dot {
   color: rgb(255 106 0 / 80%);
 }
+
+@media (max-width: 720px) {
+  /* Would otherwise sit underneath the fixed bottom tab bar (CommandNav). */
+  .micro {
+    display: none;
+  }
+}
 </style>

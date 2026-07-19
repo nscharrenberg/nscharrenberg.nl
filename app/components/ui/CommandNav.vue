@@ -1,14 +1,21 @@
 <script setup lang="ts">
+import IconAbout from '~/components/icons/IconAbout.vue'
+import IconExperience from '~/components/icons/IconExperience.vue'
+import IconHome from '~/components/icons/IconHome.vue'
+import IconProjects from '~/components/icons/IconProjects.vue'
+import IconResume from '~/components/icons/IconResume.vue'
+import IconWriting from '~/components/icons/IconWriting.vue'
+
 const route = useRoute()
 const { open: openPalette } = useCommandPalette()
 
 const links = [
-  { to: '/', path: '~' },
-  { to: '/about', path: '~/about' },
-  { to: '/projects', path: '~/projects' },
-  { to: '/experience', path: '~/experience' },
-  { to: '/writing', path: '~/writing' },
-  { to: '/resume', path: '~/resume' },
+  { to: '/', path: '~', label: 'Home', icon: IconHome },
+  { to: '/about', path: '~/about', label: 'About', icon: IconAbout },
+  { to: '/projects', path: '~/projects', label: 'Projects', icon: IconProjects },
+  { to: '/experience', path: '~/experience', label: 'Experience', icon: IconExperience },
+  { to: '/writing', path: '~/writing', label: 'Writing', icon: IconWriting },
+  { to: '/resume', path: '~/resume', label: 'Resume', icon: IconResume },
 ]
 
 function isActive(to: string) {
@@ -41,6 +48,19 @@ const currentPath = computed(() => links.find((l) => isActive(l.to))?.path ?? ro
       <span class="nav__search-label">Search</span>
       <kbd class="nav__kbd">⌘K</kbd>
     </button>
+  </nav>
+
+  <nav class="tabbar" aria-label="Primary, mobile">
+    <NuxtLink
+      v-for="link in links"
+      :key="link.to"
+      :to="link.to"
+      class="tabbar__link"
+      :class="{ 'tabbar__link--active': isActive(link.to) }"
+    >
+      <component :is="link.icon" class="tabbar__icon" />
+      <span class="tabbar__label">{{ link.label }}</span>
+    </NuxtLink>
   </nav>
 </template>
 
@@ -169,5 +189,58 @@ const currentPath = computed(() => links.find((l) => isActive(l.to))?.path ?? ro
   .nav__search-label {
     display: none;
   }
+}
+
+/* --- bottom tab bar: mobile-only replacement for .nav__list --- */
+.tabbar {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    height: var(--tabbar-height);
+    padding: 0 4px;
+    border-top: 1px solid var(--line);
+    background: rgb(7 8 11 / 88%);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.tabbar__link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  color: var(--fg2);
+  transition: color var(--dur-hover) ease;
+}
+
+.tabbar__icon {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+
+.tabbar__label {
+  font-size: 9.5px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.tabbar__link--active {
+  color: var(--accent);
 }
 </style>
