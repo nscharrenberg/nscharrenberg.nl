@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import { useIntersectionObserver } from '@vueuse/core'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { usePrefersReducedMotion } from '~/composables/usePrefersReducedMotion'
+
 interface Props {
+  /** Final text — scrambles through random characters before resolving to this once it enters the viewport. */
   text: string
+  /** Element/heading level to render as. */
   tag?: string
 }
 

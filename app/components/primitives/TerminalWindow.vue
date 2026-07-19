@@ -1,5 +1,6 @@
 <script setup lang="ts">
 interface Props {
+  /** Text shown in the titlebar next to the three dots. Omit to show only the dots. */
   title?: string
 }
 

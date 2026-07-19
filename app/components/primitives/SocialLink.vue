@@ -1,6 +1,8 @@
 <script setup lang="ts">
 interface Props {
+  /** URL for external links, or a route path when `internal` is set. */
   href: string
+  /** Accessible name — used as the visible label, tooltip text, or aria-label depending on `showLabel`. */
   label: string
   /** Internal Nuxt route — renders a <NuxtLink> instead of an external <a target="_blank">. */
   internal?: boolean
@@ -54,8 +56,6 @@ withDefaults(defineProps<Props>(), { internal: false, showLabel: false })
 }
 
 .social :deep(svg) {
-  width: 22px;
-  height: 22px;
   opacity: 0.95;
 }
 
@@ -103,11 +103,6 @@ withDefaults(defineProps<Props>(), { internal: false, showLabel: false })
   height: 40px;
   padding: 0 16px 0 12px;
   gap: 8px;
-}
-
-.social--labeled :deep(svg) {
-  width: 18px;
-  height: 18px;
 }
 
 .social__label {

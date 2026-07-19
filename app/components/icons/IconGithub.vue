@@ -1,5 +1,14 @@
+<script setup lang="ts">
+interface Props {
+  /** Icon size in pixels, applied to both width and height. */
+  size?: number
+}
+
+withDefaults(defineProps<Props>(), { size: 24 })
+</script>
+
 <template>
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <svg :width="size" :height="size" viewBox="0 0 24 24" fill="none" aria-hidden="true">
     <path
       fill="currentColor"
       d="M12 2.7a9.6 9.6 0 0 0-3.03 18.7c.48.1.66-.2.66-.46v-1.6c-2.68.58-3.24-1.14-3.24-1.14-.44-1.12-1.08-1.42-1.08-1.42-.88-.6.07-.58.07-.58 1 .07 1.52 1.02 1.52 1.02.88 1.52 2.3 1.08 2.86.82.1-.64.34-1.08.62-1.32-2.14-.24-4.4-1.08-4.4-4.8 0-1.06.38-1.92 1-2.6-.1-.25-.44-1.24.1-2.58 0 0 .82-.26 2.7 1a9.3 9.3 0 0 1 4.92 0c1.88-1.26 2.7-1 2.7-1 .54 1.34.2 2.33.1 2.58.62.68 1 1.54 1 2.6 0 3.74-2.26 4.56-4.42 4.8.36.3.68.92.68 1.86v2.76c0 .26.18.56.66.46A9.6 9.6 0 0 0 12 2.7Z"

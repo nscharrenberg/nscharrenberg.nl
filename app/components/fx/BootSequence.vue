@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { usePrefersReducedMotion } from '~/composables/usePrefersReducedMotion'
+
 // One-time boot flourish on first visit each session. Purely decorative and
 // always skippable — never gates the real content underneath, which is
 // already rendered and gets revealed the moment this closes.

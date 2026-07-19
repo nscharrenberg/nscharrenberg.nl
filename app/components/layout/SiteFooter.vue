@@ -43,13 +43,13 @@ onBeforeUnmount(() => clearInterval(timer))
 
         <nav class="footer__icons" aria-label="Footer">
           <NuxtLink to="/colophon" aria-label="Colophon" title="Colophon">
-            <IconInfo />
+            <IconInfo :size="17" />
           </NuxtLink>
           <EmailLink aria-label="Email" title="Email">
-            <IconMail />
+            <IconMail :size="17" />
           </EmailLink>
           <a :href="REPO_URL" target="_blank" rel="noopener noreferrer" aria-label="View source" title="View source">
-            <IconCode />
+            <IconCode :size="17" />
           </a>
         </nav>
       </div>
@@ -118,11 +118,6 @@ onBeforeUnmount(() => clearInterval(timer))
 
 .footer__icons a:hover {
   color: var(--accent);
-}
-
-.footer__icons :deep(svg) {
-  width: 17px;
-  height: 17px;
 }
 
 .footer__copy {
