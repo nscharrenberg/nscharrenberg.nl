@@ -13,8 +13,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       # Third-party actions are pinned to a commit SHA rather than the
       # mutable `v4` tag — if a tag were ever repointed (this exact supply-
@@ -40,8 +38,38 @@ jobs:
         env:
           # This repo isn't a `<user>.github.io` repo, so Pages serves it from
           # a subpath (https://<user>.github.io/<repo>/) — bake that into the
-          # build. Drop this once a custom domain (CNAME) is configured.
+          # build. Drop both of these once the real nscharrenberg.nl domain
+          # is live (CNAME + DNS + Pages custom domain setting):
+          # NUXT_PUBLIC_SITE_URL then falls back to the permanent domain
+          # already set in nuxt.config.ts, and every URL that's derived from
+          # it (sitemap, robots.txt, canonical, JSON-LD, OG/Twitter images)
+          # updates with it — nothing else in the codebase to touch.
           NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
+          NUXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+
+      - name: Upload build output
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: site
+          path: ./.output/public
+          retention-days: 1
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # Only this job needs write access to push to gh-pages — lint/typecheck/
+    # test/build above run with the read-only default from the top of this
+    # file, so a compromised or misbehaving dependency invoked during those
+    # steps can't push anywhere.
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: site
+          path: ./public
 
       # Publishes straight to the gh-pages branch instead of GitHub's Pages
       # "environment" — the environment route (actions/deploy-pages) kept
@@ -50,8 +78,7 @@ jobs:
       # no such gate. Repo Settings → Pages → Source must be set to
       # "Deploy from a branch" → gh-pages → / (root) for this to serve.
       - name: Deploy to gh-pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./.output/public
+          publish_dir: ./public

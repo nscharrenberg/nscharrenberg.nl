@@ -60,4 +60,5 @@
   /* --- layout --- */
   --content-width: 720px;
   --nav-height: 60px;
+  --tabbar-height: 58px;
 }

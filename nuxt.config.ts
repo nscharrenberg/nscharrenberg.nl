@@ -1,4 +1,20 @@
-const SITE_URL = 'https://nscharrenberg.nl'
+// The permanent domain, once self-hosted there. Until then, CI overrides
+// this via the NUXT_PUBLIC_SITE_URL env var to point at wherever the site
+// is actually being served (currently a GitHub Pages subpath) — see
+// .github/workflows/ci.yml. Switching domains later is then a one-line
+// change: drop that env var (or point it elsewhere) and this default takes
+// over everywhere the URL is used (sitemap, robots.txt, JSON-LD, OG tags).
+const SITE_URL = process.env.NUXT_PUBLIC_SITE_URL || 'https://nscharrenberg.nl'
+
+// A robots.txt built with an app base URL only ever appears at
+// .../<base>/robots.txt — a path crawlers never check, since they only look
+// at the true domain root. Generating one there wouldn't just be useless,
+// it'd be silently wrong, so @nuxt/robots refuses to build it at all while
+// NUXT_APP_BASE_URL is set (i.e. during the temporary GitHub Pages subpath
+// phase — see ci.yml). This makes that intentional instead of a surprise in
+// the build log; it starts generating normally the moment the custom domain
+// (and its unprefixed root) is live.
+const HAS_BASE_URL = !!process.env.NUXT_APP_BASE_URL
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -26,6 +42,10 @@ export default defineNuxtConfig({
   site: {
     url: SITE_URL,
     name: 'Noah Scharrenberg',
+  },
+
+  robots: {
+    robotsTxt: !HAS_BASE_URL,
   },
 
   app: {

@@ -1,4 +1,4 @@
 Noah Scharrenberg
 Role: AI Engineer • Software Engineer
 Profiles: codeberg.org/nscharrenberg | github.com/nscharrenberg | linkedin.com/in/nscharrenberg/
-Sections: /about, /projects, /experience, /writing
+Sections: /about, /projects, /experience, /writing, /resume
