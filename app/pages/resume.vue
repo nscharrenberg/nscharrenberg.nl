@@ -215,7 +215,7 @@ onMounted(() => {
             <p class="artifact__summary">{{ project.summary }}</p>
             <p class="artifact__flags">
               <a
-                v-for="link in project.links"
+                v-for="link in [...project.links, ...(project.publications ?? [])]"
                 :key="link.href"
                 :href="link.href"
                 target="_blank"
@@ -242,6 +242,12 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td>smtp</td>
+              <td>email</td>
+              <td><EmailLink show-address /></td>
+              <td class="netstat__state">LISTEN</td>
+            </tr>
             <tr>
               <td>tcp</td>
               <td>linkedin</td>

@@ -11,7 +11,7 @@ const route = useRoute()
     <main id="main-content" class="shell__main" tabindex="-1">
       <slot />
     </main>
-    <MicroStatus />
+    <SiteFooter />
     <CommandPalette />
   </div>
 </template>
@@ -32,14 +32,6 @@ const route = useRoute()
 
 .shell__main:focus {
   outline: none;
-}
-
-@media (max-width: 720px) {
-  .shell__main {
-    /* Clears the fixed bottom tab bar (CommandNav) so page content never
-       sits underneath it. */
-    padding-bottom: var(--tabbar-height);
-  }
 }
 
 .skip-link {

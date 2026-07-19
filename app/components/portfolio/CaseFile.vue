@@ -1,17 +1,5 @@
 <script setup lang="ts">
-export interface ProjectLink {
-  label: string
-  href: string
-}
-
-export interface Project {
-  title: string
-  summary: string
-  stack: string[]
-  /** Defaults to "Published" — set explicitly for in-progress work. */
-  status?: string
-  links: ProjectLink[]
-}
+import type { Project } from '~/types/project'
 
 const props = defineProps<{ project: Project; index: number }>()
 
@@ -35,7 +23,9 @@ function onMove(e: MouseEvent) {
       <span class="file__stamp">{{ project.status ?? 'Published' }}</span>
     </header>
 
-    <h2 class="file__title">{{ project.title }}</h2>
+    <h2 class="file__title">
+      <NuxtLink :to="`/projects/${project.slug}`">{{ project.title }}</NuxtLink>
+    </h2>
     <p class="file__summary">{{ project.summary }}</p>
 
     <div class="file__section">
@@ -45,19 +35,7 @@ function onMove(e: MouseEvent) {
       </ul>
     </div>
 
-    <div class="file__section">
-      <p class="file__label">Documents</p>
-      <div class="file__links">
-        <a
-          v-for="link in project.links"
-          :key="link.href"
-          :href="link.href"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="file__link"
-        >{{ link.label }} →</a>
-      </div>
-    </div>
+    <NuxtLink :to="`/projects/${project.slug}`" class="file__open">Open case file →</NuxtLink>
   </article>
 </template>
 
@@ -124,8 +102,16 @@ function onMove(e: MouseEvent) {
 .file__title {
   font-size: clamp(19px, 2.4vw, 22px);
   font-weight: 700;
-  color: var(--fg0);
   margin: 0 0 10px;
+}
+
+.file__title a {
+  color: var(--fg0);
+  transition: color var(--dur-hover) ease;
+}
+
+.file__title a:hover {
+  color: var(--accent);
 }
 
 .file__summary {
@@ -163,19 +149,16 @@ function onMove(e: MouseEvent) {
   color: var(--fg2);
 }
 
-.file__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm) var(--space-md);
-}
-
-.file__link {
+.file__open {
+  display: inline-block;
+  margin-top: var(--space-md);
   font-size: 13px;
+  font-weight: 700;
   color: var(--accent);
   border-bottom: 1px solid transparent;
 }
 
-.file__link:hover {
+.file__open:hover {
   border-bottom-color: currentcolor;
 }
 </style>
