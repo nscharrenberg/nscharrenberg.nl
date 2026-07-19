@@ -29,8 +29,9 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
   ],
 
-  // Component filenames are unique across subfolders (fx/, ui/, portfolio/, icons/),
-  // so keep flat tag names (<GlitchText>) instead of Nuxt's folder-prefixed defaults.
+  // Component filenames are unique across subfolders (primitives/, fx/, layout/,
+  // portfolio/, icons/), so keep flat tag names (<GlitchText>) instead of Nuxt's
+  // folder-prefixed defaults.
   // Histoire's *.story.vue files live next to the components they document —
   // ignored here so Nuxt doesn't also register them as real components.
   components: [{ path: '~/components', pathPrefix: false, ignore: ['**/*.story.vue'] }],
