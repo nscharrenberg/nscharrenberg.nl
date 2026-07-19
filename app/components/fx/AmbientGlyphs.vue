@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { usePrefersReducedMotion } from '~/composables/usePrefersReducedMotion'
+
 // Sparse, low-opacity falling glyphs — an ambient touch exclusive to Home so
 // the landing page reads as more atmospheric than the calmer inner pages.
 // Capped glyph count and a slow fall speed keep this cheap; fully skipped

@@ -24,17 +24,17 @@ useSeoMeta({
 
     <nav class="hero__socials" aria-label="Social links">
       <SocialLink href="https://www.linkedin.com/in/nscharrenberg/" label="LinkedIn">
-        <IconLinkedin />
+        <IconLinkedin :size="22" />
       </SocialLink>
       <SocialLink href="https://github.com/nscharrenberg" label="GitHub">
-        <IconGithub />
+        <IconGithub :size="22" />
       </SocialLink>
       <SocialLink href="https://codeberg.org/nscharrenberg" label="Codeberg">
-        <IconCodeberg />
+        <IconCodeberg :size="22" />
       </SocialLink>
       <span class="hero__divider" aria-hidden="true" />
       <SocialLink href="/resume" label="Resume" internal show-label>
-        <IconResume />
+        <IconResume :size="18" />
       </SocialLink>
     </nav>
   </section>

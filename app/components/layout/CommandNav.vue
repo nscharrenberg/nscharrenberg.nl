@@ -58,7 +58,7 @@ const currentPath = computed(() => links.find((l) => isActive(l.to))?.path ?? ro
       class="tabbar__link"
       :class="{ 'tabbar__link--active': isActive(link.to) }"
     >
-      <component :is="link.icon" class="tabbar__icon" />
+      <component :is="link.icon" :size="19" class="tabbar__icon" />
       <span class="tabbar__label">{{ link.label }}</span>
     </NuxtLink>
   </nav>
@@ -226,8 +226,6 @@ const currentPath = computed(() => links.find((l) => isActive(l.to))?.path ?? ro
 }
 
 .tabbar__icon {
-  width: 19px;
-  height: 19px;
   flex-shrink: 0;
 }
 

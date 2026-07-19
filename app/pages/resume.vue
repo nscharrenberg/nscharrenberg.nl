@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TimelineEntry } from '~/components/portfolio/TimelineItem.vue'
+import type { TimelineEntry } from '~/types/timeline'
 import { bio, focusAreas } from '~/data/about'
 import { education } from '~/data/education'
 import { experience } from '~/data/experience'
@@ -107,7 +107,7 @@ onMounted(() => {
         Everything above, running as one process.
       </SectionHeading>
       <button type="button" class="download" @click="downloadPdf">
-        <IconResume />
+        <IconResume :size="16" />
         Download PDF
       </button>
     </div>
@@ -307,11 +307,6 @@ onMounted(() => {
 .download:hover {
   border-color: rgb(255 106 0 / 40%);
   transform: translateY(-1px);
-}
-
-.download :deep(svg) {
-  width: 16px;
-  height: 16px;
 }
 
 .page__hint {

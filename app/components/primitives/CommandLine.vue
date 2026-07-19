@@ -1,5 +1,6 @@
 <script setup lang="ts">
 interface Props {
+  /** Shown after the `noah@host:` prefix, e.g. "~/projects". */
   path?: string
   /** Required unless `cursor` is set — a cursor-only line has no command text. */
   command?: string

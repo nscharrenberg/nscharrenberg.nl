@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { useIntersectionObserver } from '@vueuse/core'
+import { onMounted, ref } from 'vue'
+import { usePrefersReducedMotion } from '~/composables/usePrefersReducedMotion'
+
 interface Props {
+  /** Element/wrapper to render as. */
   tag?: string
   /** Stagger delay in ms — pass index * 60 or similar for list items. */
   delay?: number

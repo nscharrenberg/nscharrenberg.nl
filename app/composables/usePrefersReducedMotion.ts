@@ -1,3 +1,5 @@
+import { useMediaQuery } from '@vueuse/core'
+
 /**
  * SSR-safe reactive read of `prefers-reduced-motion`.
  * Returns `false` on the server and during the first paint, then updates

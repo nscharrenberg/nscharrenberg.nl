@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import DecryptText from '~/components/fx/DecryptText.vue'
+
 interface Props {
+  /** Small uppercase label above the title, e.g. "~/about". */
   eyebrow: string
+  /** The page heading — rendered as an <h1> that scrambles into place via DecryptText. */
   title: string
 }
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
 import { EMAIL_DOMAIN, EMAIL_USER } from '~/data/contact'
 
 interface Props {

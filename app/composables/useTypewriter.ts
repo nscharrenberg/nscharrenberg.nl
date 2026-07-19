@@ -1,3 +1,6 @@
+import { onBeforeUnmount, onMounted, readonly, ref } from 'vue'
+import { usePrefersReducedMotion } from './usePrefersReducedMotion'
+
 export interface UseTypewriterOptions {
   typingMs?: number
   deletingMs?: number

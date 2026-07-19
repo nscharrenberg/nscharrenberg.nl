@@ -1,5 +1,6 @@
 <script setup lang="ts">
 interface Props {
+  /** Text to render, with a duplicated RGB-split glitch layer behind it. */
   text: string
   /** Element/heading level to render as. */
   tag?: string

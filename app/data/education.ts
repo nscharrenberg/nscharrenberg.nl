@@ -1,4 +1,4 @@
-import type { TimelineEntry } from '~/components/portfolio/TimelineItem.vue'
+import type { TimelineEntry } from '~/types/timeline'
 
 export const education: TimelineEntry[] = [
   {

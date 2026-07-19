@@ -1,10 +1,5 @@
 <script setup lang="ts">
-export interface TimelineEntry {
-  role: string
-  org: string
-  period: string
-  summary: string
-}
+import type { TimelineEntry } from '~/types/timeline'
 
 const props = withDefaults(defineProps<{ entry: TimelineEntry; isLast?: boolean }>(), { isLast: false })
 

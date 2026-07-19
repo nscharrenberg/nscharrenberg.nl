@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useTypewriter } from '~/composables/useTypewriter'
+
 interface Props {
+  /** Phrases typed and deleted in a loop, one after another. */
   phrases: string[]
 }
 
