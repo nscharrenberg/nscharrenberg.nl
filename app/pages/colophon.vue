@@ -3,24 +3,24 @@ import { REPO_URL } from '~/data/contact'
 
 useSeoMeta({
   title: 'Colophon',
-  description: 'How this site is built — stack, hosting, and design decisions.',
+  description: 'How this site is built: stack, hosting, and design decisions.',
 })
 
 const stack = [
   'Nuxt 4 / Vue 3',
-  '@nuxt/content — Markdown for the writing section',
-  '@vueuse/nuxt — composables (reduced-motion, intersection observers)',
-  '@nuxtjs/sitemap + @nuxtjs/robots — sitemap.xml, robots.txt, canonical URLs',
-  'TypeScript, strict',
-  'Vitest + @vue/test-utils — unit tests',
+  '@nuxt/content, for the writing section',
+  '@vueuse/nuxt, mostly for reduced-motion checks and intersection observers',
+  '@nuxtjs/sitemap + @nuxtjs/robots, for sitemap.xml, robots.txt, and canonical URLs',
+  'TypeScript, strict mode on',
+  'Vitest + @vue/test-utils for the tests',
   'ESLint via @nuxt/eslint',
 ]
 
 const philosophy = [
-  'No webfonts — the whole site runs on the system monospace stack, so there is nothing to download before text renders.',
-  'No analytics, no trackers, no third-party scripts. If you want to know how many people visit, ask me.',
-  'Dark-only by design. This is a specific visual world (CRT phosphor, scanlines, glitch), not a light/dark pair — see main.css.',
-  'Every animation respects prefers-reduced-motion, and the whole site works with JavaScript disabled (content is server-rendered; only the flourishes need JS).',
+  "No webfonts. It's whatever monospace font is already on your system, so there's nothing to download before you can read anything.",
+  "No analytics, no trackers, no third-party scripts. If you're curious how many people visit, you'll have to ask me.",
+  "Dark only, and that's on purpose. This isn't a light theme I never got around to, it's a CRT/terminal look I actually wanted.",
+  'Every animation on the site respects reduced motion, and it all works fine with JavaScript off too. Everything renders ahead of time; JS just adds the extra flourishes on top.',
 ]
 </script>
 
