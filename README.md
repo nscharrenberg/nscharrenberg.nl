@@ -1,5 +1,10 @@
 # nscharrenberg.nl
 
+[![CI](https://github.com/nscharrenberg/nscharrenberg.nl/actions/workflows/ci.yml/badge.svg)](https://github.com/nscharrenberg/nscharrenberg.nl/actions/workflows/ci.yml)
+<!-- coverage-badge:start -->
+![Coverage](https://img.shields.io/badge/coverage-99.1%25-brightgreen)
+<!-- coverage-badge:end -->
+
 Personal portfolio site of Noah Scharrenberg — AI/ML Engineer, Software Engineer. Nuxt 4 (Vue 3),
 statically generated, styled as a terminal/CRT/glitch aesthetic.
 
@@ -31,6 +36,7 @@ Other scripts:
 pnpm lint            # eslint .
 pnpm typecheck       # nuxt typecheck
 pnpm test            # vitest run
+pnpm test:coverage   # vitest run --coverage
 pnpm generate        # static build → .output/public
 pnpm preview         # serve the last `generate` output locally
 pnpm story:dev       # component catalog → http://localhost:6006

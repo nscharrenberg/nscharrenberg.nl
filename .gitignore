@@ -9,6 +9,9 @@ dist
 # Histoire build output
 .histoire
 
+# Vitest coverage output
+coverage
+
 # Node dependencies
 node_modules
 
