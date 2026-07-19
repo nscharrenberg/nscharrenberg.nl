@@ -17,10 +17,10 @@ const stack = [
 ]
 
 const philosophy = [
-  "No webfonts. It's whatever monospace font is already on your system, so there's nothing to download before you can read anything.",
-  "No analytics, no trackers, no third-party scripts. If you're curious how many people visit, you'll have to ask me.",
-  "Dark only, and that's on purpose. This isn't a light theme I never got around to, it's a CRT/terminal look I actually wanted.",
-  'Every animation on the site respects reduced motion, and it all works fine with JavaScript off too. Everything renders ahead of time; JS just adds the extra flourishes on top.',
+  'No webfonts. Just the monospace font already on your system.',
+  'No analytics, no trackers, no third-party scripts. Ask me directly for visitor numbers.',
+  'Dark only. Built around a CRT/terminal look on purpose.',
+  'Animations respect reduced motion. Content renders server-side; JavaScript only adds effects on top.',
 ]
 </script>
 
