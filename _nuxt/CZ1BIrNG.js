@@ -1,0 +1,1 @@
+import{L as e,S as t,f as n,h as r}from"./jJtknXYS.js";import{t as i}from"./BDNMzG2s.js";var a={class:`crt`,"aria-hidden":`true`},o=Object.assign(i(t({__name:`CrtOverlay`,setup(t){return(t,i)=>(e(),r(`div`,a,[...i[0]||=[n(`div`,{class:`crt__sweep`},null,-1)]]))}}),[[`__scopeId`,`data-v-dba7df69`]]),{__name:`CrtOverlay`});export{o as t};
