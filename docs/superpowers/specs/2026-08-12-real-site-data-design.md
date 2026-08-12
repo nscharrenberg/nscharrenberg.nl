@@ -99,7 +99,7 @@ export const experience: TimelineEntry[] = [
 ]
 ```
 
-## 3. `app/data/projects.ts` — append 5 entries after PSALM
+## 3. `app/data/projects.ts` — append 6 entries after PSALM
 
 Order: PSALM (flagship, unchanged) then most-recent-first by project period.
 Periods are year-only, matching PSALM's existing style — the source dates
@@ -168,8 +168,15 @@ isn't mislabeled.
     period: '2022 — 2023',
     status: 'Coursework',
     summary:
-      'A Django application that uses ensemble machine learning (sequential neural networks, random forests, decision trees, linear regression) to predict protein properties like solubility — automating a step in researching sustainable, insect-based food additives that would otherwise be done manually.',
+      'A group project proposing a protein solubility prediction tool for insect-based food ingredients — extracting protein features and combining several models with ensemble learning to identify safer, more sustainable alternatives to conventional food additives.',
+    overview: [
+      'A group project proposing a protein solubility prediction tool for insect-based food ingredients — extracting protein features and combining several models with ensemble learning to identify safer, more sustainable alternatives to conventional food additives.',
+      'Implemented as a Django application. Joint work with Bunyamin Thijssen, Claudia Sanchez, Parand Mohri, Mohammad Fayazi, and Laurence Manoukian, supervised by K. Schneider at Maastricht University.',
+    ],
     stack: ['Python', 'Django', 'TensorFlow', 'Scikit-learn'],
+    publications: [
+      { label: 'Detect Alternative Insect-Based Ingredients For Solubility Properties', venue: 'Course project, Maastricht University, 2023', href: '/projects/eating-insects/paper.pdf' },
+    ],
     links: [
       { label: 'Repository', href: 'https://github.com/nscharrenberg/EatingInsects' },
     ],
@@ -186,16 +193,38 @@ isn't mislabeled.
       { label: 'Repository', href: 'https://github.com/nscharrenberg/COVID-21' },
     ],
   },
+  {
+    slug: 'frightened-flowers',
+    title: 'Frightened Flowers',
+    period: '2019',
+    status: 'Exhibited',
+    summary:
+      'An interactive light installation for Glow Eindhoven 2019, later also shown at Dutch Design Week — potted plants that physically react to nearby visitors, detected through a staged array of PIR sensors behind custom 3D-printed housings and coordinated by a Raspberry Pi server driving Arduino-controlled hardware.',
+    overview: [
+      'An interactive light installation for Glow Eindhoven 2019, later also shown at Dutch Design Week — potted plants that physically move in response to nearby visitors.',
+      'Visitor proximity is detected through a staged array of PIR sensors behind custom 3D-printed cone housings, tuned to register arm movement rather than legs or background noise. A Raspberry Pi running as a central server tracks each plant\'s state and pushes updates to Arduino-controlled hardware; the lifting mechanism itself was developed in collaboration with the TU Eindhoven Robohub.',
+    ],
+    stack: ['Arduino', 'Raspberry Pi', 'Python', 'PIR Sensors'],
+    publications: [
+      { label: 'Frightened Flowers — Research Report (Dutch)', venue: 'Internal research report, Glow Eindhoven, 2019', href: '/projects/frightened-flowers/research.pdf' },
+    ],
+    links: [
+      { label: 'Installation video', href: 'https://www.youtube.com/watch?v=KNkMIjjfhcI' },
+      { label: 'Installation video (alt)', href: 'https://www.youtube.com/watch?v=C89FyGgkbp0' },
+    ],
+  },
 ```
 
 ## 4. New static assets
 
-Copy the three source PDFs (currently in the user's Downloads folder) into
-`public/projects/<slug>/paper.pdf`:
+Copy the five source PDFs (currently in the user's Downloads folder) into
+`public/projects/<slug>/`:
 
 - `Group_5___Final_Paper.pdf` → `public/projects/hybrid-generative-tabular/paper.pdf`
 - `Project_Plan_Group_2___DSDM_Project_1.pdf` → `public/projects/job-recommendation-xai/paper.pdf`
 - `Ontology_Based_Conditional_Generative_Adversarial_Networks_for_the_Generation_of_Personal_Health_Data.pdf` → `public/projects/ontozsl-dpcgan/paper.pdf`
+- `Project_3_1_Report.pdf` → `public/projects/eating-insects/paper.pdf`
+- `Frightened_Flowers_onderzoek.pdf` → `public/projects/frightened-flowers/research.pdf`
 
 ## Out of scope
 
