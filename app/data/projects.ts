@@ -39,4 +39,108 @@ export const projects: Project[] = [
       { label: 'Repository', href: 'https://codeberg.org/nscharrenberg/PSALM' },
     ],
   },
+  {
+    slug: 'hybrid-generative-tabular',
+    title: 'Hybrid Generative Models for High-Fidelity Synthetic Tabular Data',
+    period: '2023 — 2024',
+    status: 'Coursework',
+    summary:
+      'A group research project proposing two novel models for synthetic tabular data generation: a Transformer-enhanced CTGAN that uses attention to capture complex feature relationships, and VAE-DBM, a hybrid approach pairing Variational Autoencoders for continuous variables with Deep Boltzmann Machines for categorical ones. Evaluated against the Adult Census Income dataset for fidelity and utility.',
+    overview: [
+      'A group research project proposing two novel models for synthetic tabular data generation: a Transformer-enhanced CTGAN that uses attention to capture complex feature relationships, and VAE-DBM, a hybrid approach pairing Variational Autoencoders for continuous variables with Deep Boltzmann Machines for categorical ones.',
+      'Evaluated against the Adult Census Income dataset for fidelity and utility. Joint work with Tauseef Ahmed, Jonathon Bird, and Aditya Shourya (equal contribution), supervised by Chang Sun at Maastricht University.',
+    ],
+    stack: ['Python', 'PyTorch'],
+    publications: [
+      { label: 'Hybrid Generative Models for High-Fidelity Synthetic Tabular Data', venue: 'Course project, Maastricht University, 2024', href: '/projects/hybrid-generative-tabular/paper.pdf' },
+    ],
+    links: [],
+  },
+  {
+    slug: 'job-recommendation-xai',
+    title: 'Multi-Stakeholder Explainable Job Recommendation Systems',
+    period: '2023 — 2024',
+    status: 'Coursework',
+    summary:
+      'A group research project on explainable AI for multi-stakeholder job recommender systems — examining how explanation techniques (text-based, graph-based, feature attribution) should differ across job seekers, recruiters, and company representatives to be genuinely useful to each audience.',
+    overview: [
+      'A group research project on explainable AI for multi-stakeholder job recommender systems — examining how explanation techniques (text-based, graph-based, feature attribution) should differ across job seekers, recruiters, and company representatives to be genuinely useful to each audience.',
+      'Joint work with Al-Saeedi Ali, Arslan Ayse, Parii Dan, Franz Sebastian, and Postaru Damian, supervised by Francesco Barile and Roan Schellingerhout at Maastricht University.',
+    ],
+    stack: ['Python'],
+    publications: [
+      { label: 'Multi-Stakeholder Explainable Job Recommendation Systems', venue: 'Course project, Maastricht University, 2024', href: '/projects/job-recommendation-xai/paper.pdf' },
+    ],
+    links: [],
+  },
+  {
+    slug: 'ontozsl-dpcgan',
+    title: 'OntoZSL-DPCGAN',
+    period: '2022 — 2023',
+    status: 'Thesis',
+    summary:
+      'A BSc thesis introducing Onto-CGANs and OntoZSL-CGANs — generative models for synthetic personal health data that incorporate ontology embeddings and zero-shot learning to generate realistic data for sparse or entirely unseen patient classes, extending the DP-CGAN framework with semantic, ontology-aware conditioning.',
+    overview: [
+      'A BSc thesis introducing Onto-CGANs and OntoZSL-CGANs — generative models for synthetic personal health data that incorporate ontology embeddings and zero-shot learning to generate realistic data for sparse or entirely unseen patient classes.',
+      'Extends the DP-CGAN framework with semantic, ontology-aware conditioning. Supervised by Chang Sun and Remzi Celebi at Maastricht University.',
+    ],
+    stack: ['Python', 'TensorFlow', 'PyTorch', 'Docker'],
+    publications: [
+      { label: 'Ontology-Based Conditional Generative Adversarial Networks for the Generation of Personal Health Data', venue: 'BSc Thesis, Maastricht University, 2023', href: '/projects/ontozsl-dpcgan/paper.pdf' },
+    ],
+    links: [
+      { label: 'Repository', href: 'https://github.com/nscharrenberg/OntoZSL-DPCGAN' },
+    ],
+  },
+  {
+    slug: 'eating-insects',
+    title: 'Eating Insects: Protein Property Prediction',
+    period: '2022 — 2023',
+    status: 'Coursework',
+    summary:
+      'A group project proposing a protein solubility prediction tool for insect-based food ingredients — extracting protein features and combining several models with ensemble learning to identify safer, more sustainable alternatives to conventional food additives.',
+    overview: [
+      'A group project proposing a protein solubility prediction tool for insect-based food ingredients — extracting protein features and combining several models with ensemble learning to identify safer, more sustainable alternatives to conventional food additives.',
+      'Implemented as a Django application. Joint work with Bunyamin Thijssen, Claudia Sanchez, Parand Mohri, Mohammad Fayazi, and Laurence Manoukian, supervised by K. Schneider at Maastricht University.',
+    ],
+    stack: ['Python', 'Django', 'TensorFlow', 'Scikit-learn'],
+    publications: [
+      { label: 'Detect Alternative Insect-Based Ingredients For Solubility Properties', venue: 'Course project, Maastricht University, 2023', href: '/projects/eating-insects/paper.pdf' },
+    ],
+    links: [
+      { label: 'Repository', href: 'https://github.com/nscharrenberg/EatingInsects' },
+    ],
+  },
+  {
+    slug: 'covid-21',
+    title: 'COVID-21',
+    period: '2021 — 2022',
+    status: 'Coursework',
+    summary:
+      'A digital reimplementation of the board game Pandemic, built to pit AI agents (RHEA and MCTS-based) against human players in stopping a fictional pandemic and its mutations — an academic project exploring game-playing AI within a cooperative, stochastic board game.',
+    stack: ['Java', 'JMonkeyEngine', 'Maven'],
+    links: [
+      { label: 'Repository', href: 'https://github.com/nscharrenberg/COVID-21' },
+    ],
+  },
+  {
+    slug: 'frightened-flowers',
+    title: 'Frightened Flowers',
+    period: '2019',
+    status: 'Exhibited',
+    summary:
+      'An interactive light installation for Glow Eindhoven 2019, later also shown at Dutch Design Week — potted plants that physically react to nearby visitors, detected through a staged array of PIR sensors behind custom 3D-printed housings and coordinated by a Raspberry Pi server driving Arduino-controlled hardware.',
+    overview: [
+      'An interactive light installation for Glow Eindhoven 2019, later also shown at Dutch Design Week — potted plants that physically move in response to nearby visitors.',
+      'Visitor proximity is detected through a staged array of PIR sensors behind custom 3D-printed cone housings, tuned to register arm movement rather than legs or background noise. A Raspberry Pi running as a central server tracks each plant\'s state and pushes updates to Arduino-controlled hardware; the lifting mechanism itself was developed in collaboration with the TU Eindhoven Robohub.',
+    ],
+    stack: ['Arduino', 'Raspberry Pi', 'Python', 'PIR Sensors'],
+    publications: [
+      { label: 'Frightened Flowers — Research Report (Dutch)', venue: 'Internal research report, Glow Eindhoven, 2019', href: '/projects/frightened-flowers/research.pdf' },
+    ],
+    links: [
+      { label: 'Installation video', href: 'https://www.youtube.com/watch?v=KNkMIjjfhcI' },
+      { label: 'Installation video (alt)', href: 'https://www.youtube.com/watch?v=C89FyGgkbp0' },
+    ],
+  },
 ]
