@@ -2,15 +2,63 @@ import type { TimelineEntry } from '~/types/timeline'
 
 export const experience: TimelineEntry[] = [
   {
-    role: 'ML Engineer',
-    org: 'Contractuo',
-    period: '2024 — Present',
-    summary: 'Focused on document intelligence and legal AI.',
+    role: 'Research Assistant',
+    org: 'Maastricht University',
+    period: 'Mar 2026 — Present',
+    summary: 'Part-time. Synthetic data generation for the NWO-TDCC SSH project, with a focus on copyright infringement.',
   },
   {
-    role: 'Assistant Researcher',
-    org: 'Maastricht University',
-    period: '2026 — Present',
-    summary: 'Synthetic data generation for the NWO-TDCC SSH project on copyright and LLMs.',
+    role: 'Machine Learning Researcher Intern (graduation thesis)',
+    org: 'Contractuo',
+    period: 'Apr 2025 — Oct 2025',
+    summary: 'Benchmarked large language model unlearning techniques as a mitigation strategy against copyright infringement, with a focus on EU regulatory frameworks.',
+  },
+  {
+    role: 'Machine Learning Researcher Intern',
+    org: 'Contractuo',
+    period: 'Sep 2024 — Apr 2025',
+    summary: 'Researched on-premise automation for legal document analysis, delivering quantitative and qualitative insights to optimize tender procurement using large language models.',
+  },
+  {
+    role: 'Machine Learning Engineer',
+    org: 'Contractuo',
+    period: 'Jul 2024 — Present',
+    summary: 'Part-time. Focused on document intelligence and legal AI.',
+  },
+  {
+    role: 'Software Engineer',
+    org: 'Netpresenter',
+    period: 'Sep 2023 — Jul 2024',
+    summary: 'Platform development using Laravel and Vue.',
+  },
+  {
+    role: 'Software Engineer',
+    org: 'Educom & Detacom',
+    period: 'Aug 2022 — Aug 2023',
+    summary: 'Part-time. Financial software development — new features, bugfixing, performance improvements, and refactoring using C#/ASP.NET.',
+  },
+  {
+    role: 'Software Engineer',
+    org: 'World of Content',
+    period: 'Aug 2021 — Feb 2022',
+    summary: 'Part-time. Platform development using Laravel and Vue, mainly batch upload functionality and performance improvements.',
+  },
+  {
+    role: 'Software Engineer',
+    org: 'Arion',
+    period: 'Jul 2020 — Jul 2021',
+    summary: 'Part-time. Platform development using React Native and Node.js, and reworked the audio & feedback features.',
+  },
+  {
+    role: 'AI / Software Engineering Intern (graduation internship)',
+    org: 'Arion',
+    period: 'Feb 2020 — Nov 2020',
+    summary: 'Researched conversational AI (BERT models, wake-word detection, on-device NLP), built a prototype offline on-device conversational assistant for mobile ("running assistant"), and developed an administrative dashboard for the backend system.',
+  },
+  {
+    role: 'Blockchain Consultant Intern',
+    org: 'Bearingpoint Caribbean (now Blyce)',
+    period: 'Aug 2018 — Feb 2019',
+    summary: 'Researched the product portfolio for blockchain use-cases, delivered an advisory report on innovative opportunities, and built a proof-of-concept for the Sentoo Payment Platform.',
   },
 ]
