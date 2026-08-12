@@ -5,7 +5,7 @@
  * defeats the regex-based scrapers that make up the bulk of address harvesting,
  * without hiding it from real visitors or breaking the resume's print output.
  */
-export const EMAIL_USER = 'REPLACE_ME'
-export const EMAIL_DOMAIN = 'replace-with-your-domain.example'
+export const EMAIL_USER = 'noah'
+export const EMAIL_DOMAIN = 'glorycode.nl'
 
 export const REPO_URL = 'https://github.com/nscharrenberg/nscharrenberg.nl'
