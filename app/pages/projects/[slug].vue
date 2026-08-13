@@ -3,6 +3,7 @@ import { projects } from '~/data/projects'
 
 const route = useRoute()
 const slug = route.params.slug as string
+const { app } = useRuntimeConfig()
 
 const index = projects.findIndex((p) => p.slug === slug)
 if (index === -1) {
@@ -51,7 +52,7 @@ useSeoMeta({
       <h2 class="exhibit__label"><span class="exhibit__letter">Exhibit C</span> Publications</h2>
       <ul class="pubs">
         <li v-for="pub in project.publications" :key="pub.href" class="pub">
-          <a :href="pub.href" target="_blank" rel="noopener noreferrer" class="pub__link">
+          <a :href="withBaseUrl(pub.href, app.baseURL)" target="_blank" rel="noopener noreferrer" class="pub__link">
             <span class="pub__title">{{ pub.label }}</span>
             <span class="pub__venue">{{ pub.venue }}</span>
           </a>
@@ -63,7 +64,7 @@ useSeoMeta({
       <h2 class="exhibit__label"><span class="exhibit__letter">Exhibit D</span> Links</h2>
       <ul class="pubs">
         <li v-for="link in project.links" :key="link.href" class="pub">
-          <a :href="link.href" target="_blank" rel="noopener noreferrer" class="pub__link pub__link--plain">
+          <a :href="withBaseUrl(link.href, app.baseURL)" target="_blank" rel="noopener noreferrer" class="pub__link pub__link--plain">
             {{ link.label }} →
           </a>
         </li>
