@@ -3,6 +3,8 @@ import type { ProjectMedia } from '~/types/project'
 
 const props = defineProps<{ media: ProjectMedia[] }>()
 
+const { app } = useRuntimeConfig()
+
 const activeIndex = ref<number | null>(null)
 const isOpen = computed(() => activeIndex.value !== null)
 const active = computed(() => (activeIndex.value !== null ? props.media[activeIndex.value] : null))
@@ -57,7 +59,7 @@ watch(isOpen, (open) => {
       :aria-label="`Open image: ${item.alt}`"
       @click="open(i, $event)"
     >
-      <img :src="item.src" :alt="item.alt" loading="lazy">
+      <img :src="withBaseUrl(item.src, app.baseURL)" :alt="item.alt" loading="lazy">
       <span v-if="item.placeholder" class="gallery__badge">Placeholder</span>
     </button>
 
@@ -76,7 +78,7 @@ watch(isOpen, (open) => {
             >‹</button>
 
             <figure class="lightbox__figure">
-              <img :src="active?.src" :alt="active?.alt">
+              <img :src="active ? withBaseUrl(active.src, app.baseURL) : undefined" :alt="active?.alt">
               <span v-if="active?.placeholder" class="gallery__badge gallery__badge--lightbox">Placeholder</span>
               <figcaption v-if="active?.caption" class="lightbox__caption">{{ active.caption }}</figcaption>
             </figure>

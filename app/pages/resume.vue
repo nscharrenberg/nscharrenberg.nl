@@ -10,6 +10,8 @@ useSeoMeta({
   description: "Noah Scharrenberg's resume — experience, education, projects, and skills.",
 })
 
+const { app } = useRuntimeConfig()
+
 function downloadPdf() {
   window.print()
 }
@@ -217,7 +219,7 @@ onMounted(() => {
               <a
                 v-for="link in [...project.links, ...(project.publications ?? [])]"
                 :key="link.href"
-                :href="link.href"
+                :href="withBaseUrl(link.href, app.baseURL)"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="artifact__flag"
