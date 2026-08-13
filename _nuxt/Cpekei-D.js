@@ -1,0 +1,1 @@
+var e=`noah`,t=`glorycode.nl`,n=`https://github.com/nscharrenberg/nscharrenberg.nl`;export{e as n,n as r,t};

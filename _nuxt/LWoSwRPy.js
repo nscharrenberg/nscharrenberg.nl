@@ -1,1 +1,0 @@
-var e=`REPLACE_ME`,t=`replace-with-your-domain.example`,n=`https://github.com/nscharrenberg/nscharrenberg.nl`;export{e as n,n as r,t};
